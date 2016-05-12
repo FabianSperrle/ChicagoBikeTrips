@@ -1,3 +1,8 @@
+chicago_bike:
+    resource: "@ChicagoBikeBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
