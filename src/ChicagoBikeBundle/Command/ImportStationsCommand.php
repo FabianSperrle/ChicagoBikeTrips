@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fabian
- * Date: 12.05.2016
- * Time: 16:35
- */
 
 namespace ChicagoBikeBundle\Command;
 
