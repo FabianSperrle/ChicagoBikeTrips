@@ -10,14 +10,13 @@ namespace ChicagoBikeBundle\Command;
 
 
 use ChicagoBikeBundle\Entity\Trip;
+use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\Finder\Finder;
 
 class ImportTripsCommand extends ContainerAwareCommand
@@ -84,6 +83,7 @@ class ImportTripsCommand extends ContainerAwareCommand
                 if ($i % 100 == 0) {
                     $output->writeln($row[0]);
                     $this->em->flush();
+                    $this->em->clear();
                 }
                 $i++;
             }
