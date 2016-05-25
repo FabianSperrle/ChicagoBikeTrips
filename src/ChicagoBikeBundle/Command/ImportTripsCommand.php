@@ -22,9 +22,6 @@ use Symfony\Component\Finder\Finder;
 class ImportTripsCommand extends ContainerAwareCommand
 {
 
-    /**
-     * @var EntityManager
-     */
     private $em;
 
     protected function configure()
@@ -38,6 +35,8 @@ class ImportTripsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->em = $this->getContainer()->get('doctrine')->getEntityManager();
+        // Disable SQL logger for performance improvements?!
+        $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $path = $input->getArgument('path');
         $skipHeader = $input->getOption('skip_header');
@@ -80,14 +79,16 @@ class ImportTripsCommand extends ContainerAwareCommand
 
                 $this->em->persist($trip);
 
-                if ($i % 100 == 0) {
+                if ($i % 1000 == 0) {
                     $output->writeln($row[0]);
                     $this->em->flush();
                     $this->em->clear();
+                    $output->writeln("Collected " . gc_collect_cycles() . " cycles");
                 }
                 $i++;
             }
             $this->em->flush();
+            $this->em->clear();
             $file = null;
         }
     }
