@@ -54,7 +54,8 @@ class ImportTripsCommand extends ContainerAwareCommand
             }
 
             $i = 1;
-            while (($row = $file->fgetcsv()) != false) {
+            while (!$file->eof()) {
+                $row = $file->fgetcsv();
                 $trip = new Trip();
                 $fromStation = $this->em->getRepository('ChicagoBikeBundle:Station')->find($row[5]);
                 $toStation = $this->em->getRepository('ChicagoBikeBundle:Station')->find($row[7]);
@@ -79,7 +80,8 @@ class ImportTripsCommand extends ContainerAwareCommand
 
                 $this->em->persist($trip);
 
-                if ($i % 1000 == 0) {
+                if ($i == 1000) {
+                    $i = 0;
                     $output->writeln($row[0]);
                     $this->em->flush();
                     $this->em->clear();
