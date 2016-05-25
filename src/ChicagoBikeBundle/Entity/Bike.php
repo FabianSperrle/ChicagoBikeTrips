@@ -32,27 +32,17 @@ class Bike
      * @var \DateTime
      *
      * @ORM\Id
-     * @ORM\Column(name="starttime", type="datetime")
+     * @ORM\Column(name="starttime", type="mydatetime")
      */
     private $starttime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="endtime", type="datetime", nullable=true)
+     * @ORM\Column(name="endtime", type="mydatetime", nullable=true)
      */
     private $endtime;
 
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set bikeid

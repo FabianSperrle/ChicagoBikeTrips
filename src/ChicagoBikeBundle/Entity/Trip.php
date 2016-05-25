@@ -25,14 +25,14 @@ class Trip
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="starttime", type="datetime")
+     * @ORM\Column(name="starttime", type="mydatetime")
      */
     private $starttime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="endtime", type="datetime")
+     * @ORM\Column(name="endtime", type="mydatetime")
      */
     private $endtime;
 
