@@ -20,11 +20,11 @@ class BikeTableCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $connection = $this->getContainer()->get('doctrine.dbal.connection');
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $connection = $em->getConnection();
         $connection->getConfiguration()->setSQLLogger(null);
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        
+
         $result = $connection->executeQuery("SELECT * FROM trip ORDER BY bikeid, endtime");
 
         /** @var Bike $oldBike */
