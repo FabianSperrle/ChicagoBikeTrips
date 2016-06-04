@@ -6,6 +6,7 @@
 namespace ChicagoBikeBundle\Command;
 
 use ChicagoBikeBundle\Entity\Bike;
+use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,41 +21,38 @@ class BikeTableCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $batchSize = 5000;
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $connection = $em->getConnection();
         $connection->getConfiguration()->setSQLLogger(null);
 
+        $filename = sys_get_temp_dir() . "/bike.csv";
+        $file = fopen($filename, 'w');
+        fwrite($file, "");
 
-        $result = $connection->executeQuery("SELECT * FROM trip ORDER BY bikeid, endtime");
-
-        /** @var Bike $oldBike */
-        $oldBike = null;
-
-        $i = 0;
-        foreach ($result as $item) {
-            if ($oldBike) {
-                if ($oldBike->getBikeid() == $item['bikeid']) {
-                    $oldBike->setEndtime($item['starttime']);
+        $limit = $batchSize;
+        $offset = 0;
+        while ($result = $connection->executeQuery("SELECT * FROM trip ORDER BY bikeid, endtime LIMIT $limit OFFSET $offset")) {
+            $previous = [];
+            foreach ($result as $item) {
+                if ($previous && $previous['bikeid'] == $item['bikeid'] && $previous['tostation'] == $item['fromstation']) {
+                    fputcsv($file, [
+                        $item['bikeid'],
+                        $item['fromstation'],
+                        $previous['endtime'],
+                        $item['starttime']
+                    ]);
                 }
-                $em->persist($oldBike);
-                if ($i == 1000) {
-                    $output->writeln($oldBike->getBikeid() . " - " . $oldBike->getStarttime()->format("Y-m-d H:i:s"));
-                    $i = 0;
-                    $em->flush();
-                    $em->clear();
-                }
+
+                $previous = $item;
             }
-            $bike = new Bike();
-            $bike->setBikeid($item['bikeid']);
-            $bike->setStationid($item['tostation']);
-            $bike->setStarttime($item['endtime']);
-
-            $oldBike = $bike;
-            $i++;
+            $limit = $batchSize + 1;
+            $offset = ($offset == 0 ? $batchSize - 1 : $offset + $batchSize);
+            $output->writeln("Processed offset " . $offset);
         }
+        fclose($file);
 
-        $em->persist($oldBike);
-        $em->flush();
+        $connection->executeUpdate("COPY bike FROM '" . $filename . "' DELIMITER ',' CSV");
     }
 
 }
