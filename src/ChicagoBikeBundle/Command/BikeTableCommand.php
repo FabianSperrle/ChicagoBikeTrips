@@ -32,9 +32,13 @@ class BikeTableCommand extends ContainerAwareCommand
 
         $limit = $batchSize;
         $offset = 0;
-        while ($result = $connection->executeQuery("SELECT * FROM trip ORDER BY bikeid, endtime LIMIT $limit OFFSET $offset")) {
+        $resultEmpty = true;
+        while ($resultEmpty && $result = $connection->executeQuery("SELECT * FROM trip ORDER BY bikeid, endtime LIMIT $limit OFFSET $offset")) {
             $previous = [];
+
+            $resultEmpty = false;
             foreach ($result as $item) {
+                $resultEmpty = true;
                 if ($previous && $previous['bikeid'] == $item['bikeid'] && $previous['tostation'] == $item['fromstation']) {
                     fputcsv($file, [
                         $item['bikeid'],
@@ -52,6 +56,7 @@ class BikeTableCommand extends ContainerAwareCommand
         }
         fclose($file);
 
+        // TODO: does not work, if there are duplicates (violating primary key constraint)
         $connection->executeUpdate("COPY bike FROM '" . $filename . "' DELIMITER ',' CSV");
     }
 
