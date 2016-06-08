@@ -32,14 +32,14 @@ class Bike
      * @var \DateTime
      *
      * @ORM\Id
-     * @ORM\Column(name="starttime", type="mydatetime")
+     * @ORM\Column(name="starttime", type="datetime")
      */
     private $starttime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="endtime", type="mydatetime", nullable=true)
+     * @ORM\Column(name="endtime", type="datetime", nullable=true)
      */
     private $endtime;
 
