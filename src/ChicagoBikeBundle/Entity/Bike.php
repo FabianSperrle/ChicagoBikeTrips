@@ -15,7 +15,15 @@ class Bike
     /**
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="bikeid", type="integer")
      */
     private $bikeid;
@@ -23,7 +31,6 @@ class Bike
     /**
      * @var int
      *
-     * @ORM\Id
      * @ORM\Column(name="stationid", type="integer")
      */
     private $stationid;
@@ -31,7 +38,6 @@ class Bike
     /**
      * @var \DateTime
      *
-     * @ORM\Id
      * @ORM\Column(name="starttime", type="datetime")
      */
     private $starttime;
@@ -43,6 +49,13 @@ class Bike
      */
     private $endtime;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set bikeid
