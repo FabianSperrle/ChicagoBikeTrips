@@ -57,8 +57,7 @@ class BikeRelocationImportCommand extends ContainerAwareCommand
             $output->writeln("Processed offset " . $offset);
         }
         fclose($file);
-
-        // TODO: does not work, if there are duplicates (violating primary key constraint)
+        
         $connection->executeUpdate("COPY bike_relocation FROM '" . $filename . "' DELIMITER ',' CSV");
     }
 }
