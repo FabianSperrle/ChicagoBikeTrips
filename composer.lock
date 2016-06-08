@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cabf54e88ae3fa71965582f3e7ead0fb",
-    "content-hash": "412cc7e7b6d65c1934a8812a94d278d6",
+    "hash": "7f982149e9d46c4063279b6a2a707789",
+    "content-hash": "63b69489f8cf398b48223e92f4b2b313",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -873,6 +873,68 @@
                 "sql"
             ],
             "time": "2014-01-12 16:20:24"
+        },
+        {
+            "name": "jsor/doctrine-postgis",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jsor/doctrine-postgis.git",
+                "reference": "25a6f87cba4ac0d643fde863bdbdfb2259ef89db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jsor/doctrine-postgis/zipball/25a6f87cba4ac0d643fde863bdbdfb2259ef89db",
+                "reference": "25a6f87cba4ac0d643fde863bdbdfb2259ef89db",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.4",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.4",
+                "fabpot/php-cs-fixer": "~1.6"
+            },
+            "suggest": {
+                "doctrine/orm": "For using with the Doctrine ORM"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jsor\\Doctrine\\PostGIS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com",
+                    "homepage": "http://sorgalla.com"
+                }
+            ],
+            "description": "Spatial and Geographic Data with PostGIS and Doctrine.",
+            "keywords": [
+                "database",
+                "dbal",
+                "doctrine",
+                "geo",
+                "geography",
+                "geometry",
+                "gis",
+                "orm",
+                "postgis",
+                "spatial"
+            ],
+            "time": "2016-04-08 07:06:30"
         },
         {
             "name": "monolog/monolog",
@@ -1959,8 +2021,5 @@
     "platform": {
         "php": ">=5.5.9"
     },
-    "platform-dev": [],
-    "platform-overrides": {
-        "php": "5.5.9"
-    }
+    "platform-dev": []
 }
