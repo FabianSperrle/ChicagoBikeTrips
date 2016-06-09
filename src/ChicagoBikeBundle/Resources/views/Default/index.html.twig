@@ -1,1 +1,28 @@
-Hello World!
+<html>
+    <head>
+        <title>Chicago Bike Trips</title>
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/map.css') }}">
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
+        <link rel="stylesheet" href="{{ asset('assets/css/leaflet.markercluster.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/leaflet.layercontrol.css') }}">
+
+
+        <script src="{{ asset('assets/js/telegraph.min.js') }}"></script>
+        <script src="{{ asset('assets/js/leaflet.min.js') }}"></script>
+        <script src="{{ asset('assets/js/leaflet.layercontrol.js') }}"></script>
+        <script src="{{ asset('assets/js/leaflet.heat.js') }}"></script>
+        <script src="{{ asset('assets/js/leaflet.markercluster.js') }}"></script>
+        <script src="{{ asset('assets/js/d3.min.js') }}"></script>
+    </head>
+
+    <body>
+        <h1>Bike Trips in Chicago</h1>
+        <div id="map_container">
+            <div id="map"> </div>
+        </div>
+
+        <script src="{{ asset('assets/js/data.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/map.controller.js') }}"></script>
+    </body>
+</html>
