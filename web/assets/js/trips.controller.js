@@ -8,14 +8,14 @@ function addLineChart() {
             bottom: 20,
             left: 50
         },
-        xRange = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(data.trips_per_day, function(d) {
+        xRange = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(data.trips_per_week, function(d) {
             return d.week;
-        }), d3.max(data.trips_per_day, function(d) {
+        }), d3.max(data.trips_per_week, function(d) {
             return d.week;
         })]),
-        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(data.trips_per_day, function(d) {
+        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(data.trips_per_week, function(d) {
             return Math.min(d.customers, d.subscribers);
-        }), d3.max(data.trips_per_day, function(d) {
+        }), d3.max(data.trips_per_week, function(d) {
             return Math.max(d.customers, d.subscribers);
         })]),
         xAxis = d3.svg.axis()
@@ -57,13 +57,13 @@ function addLineChart() {
         .interpolate('linear');
 
     vis.append('svg:path')
-        .attr('d', customersLineFunc(data.trips_per_day))
+        .attr('d', customersLineFunc(data.trips_per_week))
         .attr('stroke', 'blue')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
     vis.append('svg:path')
-        .attr('d', subscribersLineFunc(data.trips_per_day))
+        .attr('d', subscribersLineFunc(data.trips_per_week))
         .attr('stroke', 'red')
         .attr('stroke-width', 2)
         .attr('fill', 'none');

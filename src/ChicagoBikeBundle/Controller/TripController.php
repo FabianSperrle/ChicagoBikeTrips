@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class TripController extends Controller
 {
     /**
-     * @Route("/per_day", name="trips_per_day", options={"expose": true})
+     * @Route("/per_week", name="trips_per_week", options={"expose": true})
      * @return JsonResponse
      */
-    public function tripsPerDayAction()
+    public function tripsPerWeekAction()
     {
         $conn = $this->get('database_connection');
         $data = $conn->executeQuery('SELECT cast(extract(epoch from week) AS INTEGER) AS week, customers, subscribers FROM trips_per_week')->fetchAll();
