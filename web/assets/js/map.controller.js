@@ -1,3 +1,5 @@
+
+"use strict";
 var tiles = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
     maxZoom: 18,
 });
@@ -126,8 +128,26 @@ function addBikeRacks() {
     });
     control.addOverlay(racks, "Bike Stations");
 }
+
+function addTopTripsLayer() {
+    var lines = [];
+
+    for (var i = 0; i < data.top_trips.length; i++) {
+        var current = data.top_trips[i];
+        var latlng_from = L.latLng(current.from_lat, current.from_long);
+        var latlng_to = L.latLng(current.to_lat, current.to_long);
+
+        lines.push(L.polyline([latlng_from, latlng_to]));
+    }
+
+    var lineLayer = L.layerGroup(lines);
+    control.addOverlay(lineLayer, "Top Trips")
+    lineLayer.addTo(map);
+}
+
 data.on('loaded', addPointsLayer);
 data.on('loaded', addClusterLayer);
 data.on('loaded', addHeatLayer);
 data.on('bike_tracks', addBikeTracks);
 data.on('racks', addBikeRacks);
+data.on('top_trips', addTopTripsLayer);
