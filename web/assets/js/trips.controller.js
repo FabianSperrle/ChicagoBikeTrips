@@ -1,4 +1,10 @@
 function addLineChart() {
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    var formatTime = d3.time.format("%d.%m.%Y");
+
     var vis = d3.select('#trips-per-day'),
         WIDTH = 1000,
         HEIGHT = 500,
@@ -56,17 +62,47 @@ function addLineChart() {
         })
         .interpolate('linear');
 
+
+
+    function addScatterPlot(type, color) {
+        vis.selectAll("dot")
+            .data(data.trips_per_week)
+            .enter().append("circle")
+            .attr("r", 5)
+            .attr("stroke", color)
+            .attr("fill", color)
+            .attr("cx", function(d) { return xRange(d.week); })
+            .attr("cy", function(d) { return yRange(d[type]); })
+            .on("mouseover", function(d) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(formatTime(d.week) + "<br/>"  + d[type])
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    }
+
     vis.append('svg:path')
         .attr('d', customersLineFunc(data.trips_per_week))
         .attr('stroke', 'blue')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
+    addScatterPlot('customers', 'blue');
+
     vis.append('svg:path')
         .attr('d', subscribersLineFunc(data.trips_per_week))
         .attr('stroke', 'red')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
+
+    addScatterPlot('subscribers', 'red');
 }
 
 data.on('loaded', addLineChart);
