@@ -103,6 +103,32 @@ function addLineChart() {
         .attr('fill', 'none');
 
     addScatterPlot('subscribers', 'red');
+
+    var legendRectSize = 18;
+    var legendSpacing = 4;
+    var legend = vis.selectAll('.legend')
+        .data([{name: "Customers", color: "blue"}, {name: "Subscribers", color: "red"}])
+        .enter()
+        .append('g')
+        .attr('class', 'legend')
+        .attr('transform', function(d, i) {
+            var vert = 50 + i * 30;
+            var left = MARGINS.left + 20;
+            return 'translate(' + left + ',' + vert + ')';
+        });
+    legend.append('rect')
+        .attr('width', legendRectSize)
+        .attr('height', legendRectSize)
+        .style('fill', function (d) {
+            return d.color;
+        })
+        .style('stroke', function (d) {
+            return d.color;
+        });
+    legend.append('text')
+        .attr('x', legendRectSize + legendSpacing)
+        .attr('y', legendRectSize - legendSpacing)
+        .text(function(d) { return d.name; });
 }
 
 data.on('loaded', addLineChart);
