@@ -3,6 +3,7 @@ function DataController() {
     this.all = {};
     this.tracks = {};
     this.racks = {};
+    this.trips_per_day = {};
 }
 
 var data = new DataController();
@@ -29,4 +30,17 @@ d3.json("/assets/data/racks.geojson", function(error, json) {
     data.racks = json;
 
     data.emit('racks');
+});
+
+d3.json(Routing.generate("trips_per_day"), function (error, json) {
+    if (error) throw error;
+
+    json = json.map(function (elem) {
+        elem.x = new Date(elem.x * 1000);
+        return elem;
+    });
+
+    data.trips_per_day = json;
+
+    data.emit('trips per day');
 });
