@@ -8,14 +8,14 @@ function DataController() {
 var data = new DataController();
 
 
-d3.json("http://www.chicago.dev/web/app_dev.php/stations/", function (error, json) {
+d3.json(Routing.generate("list_stations"), function (error, json) {
     if (error) throw error;
 
     data.all = json;
     data.emit('loaded');
 });
 
-d3.json("http://www.chicago.dev/web/assets/data/bike_tracks.geojson", function(error, json) {
+d3.json("assets/data/bike_tracks.geojson", function(error, json) {
     if (error) throw error;
     
     data.tracks = json;
@@ -23,7 +23,7 @@ d3.json("http://www.chicago.dev/web/assets/data/bike_tracks.geojson", function(e
     data.emit('bike_tracks');
 });
 
-d3.json("http://www.chicago.dev/web/assets/data/racks.geojson", function(error, json) {
+d3.json("assets/data/racks.geojson", function(error, json) {
     if (error) throw error;
 
     data.racks = json;

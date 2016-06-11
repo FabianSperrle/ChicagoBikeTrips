@@ -11,7 +11,7 @@ class StationController extends Controller
 {
 
     /**
-     * @Route("stations/")
+     * @Route("stations/", name="list_stations", options={"expose": true})
      */
     public function listAction() {
         $em = $this->getDoctrine()->getManager();
