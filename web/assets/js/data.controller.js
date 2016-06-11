@@ -36,7 +36,7 @@ d3.json(Routing.generate("trips_per_week"), function (error, json) {
     if (error) throw error;
 
     json = json.map(function (elem) {
-        elem.x = new Date(elem.x * 1000);
+        elem.week = new Date(elem.week * 1000);
         return elem;
     });
 
