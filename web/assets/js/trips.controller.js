@@ -131,4 +131,4 @@ function addLineChart() {
         .text(function(d) { return d.name; });
 }
 
-data.on('loaded', addLineChart);
+data.on('trips_per_day', addLineChart);
