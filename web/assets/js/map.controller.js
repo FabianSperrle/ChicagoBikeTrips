@@ -131,18 +131,22 @@ function addBikeRacks() {
     control.addOverlay(racks, "Bike Stations");
 }
 
-function addTopTripsLayer() {
+var lineLayer = null;
+function addTopTripsLayer(data) {
+    if (lineLayer != null) {
+        map.removeLayer(lineLayer);
+    }
     var lines = [];
 
-    for (var i = 0; i < data.top_trips.length; i++) {
-        var current = data.top_trips[i];
+    for (var i = 0; i < data.length; i++) {
+        var current = data[i];
         var latlng_from = L.latLng(current.from_lat, current.from_long);
         var latlng_to = L.latLng(current.to_lat, current.to_long);
 
         lines.push(L.polyline([latlng_from, latlng_to]));
     }
 
-    var lineLayer = L.layerGroup(lines);
+    lineLayer = L.layerGroup(lines);
     control.addOverlay(lineLayer, "Top Trips")
     lineLayer.addTo(map);
 }
@@ -152,4 +156,3 @@ data.on('loaded', addClusterLayer);
 data.on('loaded', addHeatLayer);
 data.on('bike_tracks', addBikeTracks);
 data.on('racks', addBikeRacks);
-data.on('top_trips', addTopTripsLayer);

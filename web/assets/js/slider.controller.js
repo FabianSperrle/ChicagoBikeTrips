@@ -100,6 +100,7 @@ function load_data() {
     console.log(date);
     console.log(timestamp);
     data.loadTop5(timestamp);
+    data.loadTopTrips(50, date.getTime() / 1000);
 }
 
 var top5Ids = [undefined, undefined, undefined, undefined, undefined];
@@ -191,3 +192,4 @@ function processTop5(top5) {
 }
 
 data.on('top5', processTop5);
+data.on('top_trips_per_month', addTopTripsLayer);

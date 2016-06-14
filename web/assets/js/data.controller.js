@@ -7,7 +7,6 @@ function DataController() {
     this.racks = {};
     this.markerlist = {};
     this.trips_per_week = {};
-    this.top_trips = {};
 }
 
 DataController.prototype.loadTop5 = function(timestamp) {
@@ -16,6 +15,15 @@ DataController.prototype.loadTop5 = function(timestamp) {
         if (error) throw error;
 
         self.emit('top5', json);
+    });
+}
+
+DataController.prototype.loadTopTrips = function(amount, timestamp) {
+    var self = this;
+    d3.json(Routing.generate("top_trips_per_month", {"timestamp": timestamp, "amount": amount} ), function (error, json) {
+        if (error) throw error;
+
+        self.emit('top_trips_per_month', json);
     });
 }
 
@@ -56,13 +64,4 @@ d3.json(Routing.generate("trips_per_week"), function (error, json) {
     data.trips_per_week = json;
 
     data.emit('trips_per_day');
-});
-
-
-d3.json(Routing.generate("top_trips", {'amount': 50}), function (error, json) {
-    if (error) throw error;
-
-    data.top_trips = json;
-
-    data.emit('top_trips');
 });

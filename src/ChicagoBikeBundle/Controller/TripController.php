@@ -47,4 +47,31 @@ class TripController extends Controller
 
         return new JsonResponse($data);
     }
+
+    /**
+     * @Route("/top/{amount}/{timestamp}", requirements={"amount": "\d+", "timestamp": "\d+"}, name="top_trips_per_month", options={"expose": true})
+     */
+    public function topTripsPerMonthAction($amount, $timestamp)
+    {
+        $conn = $this->get('database_connection');
+        $timestamp = (new \DateTime())
+            ->setTimestamp($timestamp)
+            ->modify("first day of this month")
+            ->getTimestamp();
+        $timestamp = floor($timestamp/86400)*86400;
+        $query = $conn->prepare('SELECT s_from.latitude from_lat, s_from.longitude from_long, s_to.latitude to_lat, s_to.longitude to_long
+FROM top_trips_per_month tt
+LEFT JOIN station s_from ON s_from.id = tt.fromstation
+LEFT JOIN station s_to ON s_to.id = tt.tostation
+WHERE fromstation != tostation AND extract(epoch FROM month) = :month
+ORDER BY count DESC
+LIMIT :limit');
+        $query->execute([
+            ':limit' => $amount,
+            ':month' => $timestamp
+        ]);
+        $data = $query->fetchAll();
+
+        return new JsonResponse($data);
+    }
 }
