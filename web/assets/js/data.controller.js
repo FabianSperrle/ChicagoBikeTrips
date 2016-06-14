@@ -1,3 +1,5 @@
+"use strict";
+
 function DataController() {
     telegraph(this);
     this.all = {};
@@ -5,6 +7,7 @@ function DataController() {
     this.racks = {};
     this.markerlist = {};
     this.trips_per_week = {};
+    this.top_trips = {};
 }
 
 DataController.prototype.loadTop5 = function(timestamp) {
@@ -52,5 +55,14 @@ d3.json(Routing.generate("trips_per_week"), function (error, json) {
 
     data.trips_per_week = json;
 
-    data.emit('trips per day');
+    data.emit('trips_per_day');
+});
+
+
+d3.json(Routing.generate("top_trips", {'amount': 50}), function (error, json) {
+    if (error) throw error;
+
+    data.top_trips = json;
+
+    data.emit('top_trips');
 });

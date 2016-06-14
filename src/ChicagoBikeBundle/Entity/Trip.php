@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\ManyToOne as ManyToOne;
 /**
  * Trip
  *
- * @ORM\Table(name="trip")
+ * @ORM\Table(name="trip", indexes={@ORM\Index(name="stations_idx", columns={"fromstation", "tostation"})})
  * @ORM\Entity(repositoryClass="ChicagoBikeBundle\Repository\TripRepository")
  */
 class Trip
