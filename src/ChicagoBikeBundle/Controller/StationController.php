@@ -3,6 +3,7 @@
 namespace ChicagoBikeBundle\Controller;
 
 use ChicagoBikeBundle\Entity\Station;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,6 +30,7 @@ class StationController extends Controller
      */
     public function top5_per_day($timestamp) {
         $conn = $this->get('database_connection');
+        $timestamp = (new DateTime())->setTimestamp($timestamp)->setTime(20, 0, 0)->getTimestamp();
         $query = $conn->prepare("SELECT date, rank1, rank2, rank3, rank4, rank5
                         FROM top5_stations_per_day
                         WHERE extract (epoch from date) = ?");
