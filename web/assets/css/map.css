@@ -38,6 +38,10 @@ LEAFLET ICONS
     margin: -20px 0 0 -20px;
 }
 
+.pin.highlight {
+    background-color: red;
+}
+
 .pin:after {
     content: '';
     width: 6px;

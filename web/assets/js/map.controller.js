@@ -44,15 +44,16 @@ var addClusterLayer = function () {
     control.addOverlay(clusters, "Divvy Station Clusters", "Visualizations");
 };
 
+var points = L.layerGroup();
 var addPointsLayer = function () {
-    var markerList = [];
+    data.markerList = [];
 
     for (var i = 0; i < data.all.length; i++) {
         var a = data.all[i];
         var title = a.name;
 
         var divIcon = L.divIcon({
-            className: 'pin ' + title.replace(/ /g, ''),
+            className: 'pin',
             iconSize: [20, 20]
         });
 
@@ -68,10 +69,11 @@ var addPointsLayer = function () {
             "Online Since: " + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
 
         marker.bindPopup(popup);
-        markerList.push(marker);
+        points.addLayer(marker);
+        
+        data.all[i].layerId = points.getLayerId(marker);
     }
 
-    var points = L.layerGroup(markerList);
     control.addOverlay(points, "Divvy Stations", "Visualizations");
     points.addTo(map);
     

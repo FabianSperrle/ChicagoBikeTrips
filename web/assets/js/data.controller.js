@@ -3,7 +3,17 @@ function DataController() {
     this.all = {};
     this.tracks = {};
     this.racks = {};
+    this.markerlist = {};
     this.trips_per_week = {};
+}
+
+DataController.prototype.loadTop5 = function(timestamp) {
+    var self = this;
+    d3.json(Routing.generate("top5_per_day", {"timestamp": timestamp} ), function (error, json) {
+        if (error) throw error;
+
+        self.emit('top5', json);
+    });
 }
 
 var data = new DataController();

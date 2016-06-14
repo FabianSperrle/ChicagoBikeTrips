@@ -24,6 +24,26 @@ class StationController extends Controller
     }
 
     /**
+     * @Route("stations/top5/{timestamp}", name="top5_per_day", options={"expose": true})
+     * @param $timestamp
+     */
+    public function top5_per_day($timestamp) {
+        $conn = $this->get('database_connection');
+        $query = $conn->prepare("SELECT date, rank1, rank2, rank3, rank4, rank5
+                        FROM top5_stations_per_day
+                        WHERE extract (epoch from date) = ?");
+        $query->bindParam(1, $timestamp);
+        $query->execute();
+        $json = $query->fetchAll();
+        
+        if (count($json) == 0) {
+            throw new \InvalidArgumentException("Time stamp invalid or out of range");
+        }
+        
+        return new JsonResponse($json);
+    }
+
+    /**
      * @Route("stations/{id}")
      *
      * @param Station $station
