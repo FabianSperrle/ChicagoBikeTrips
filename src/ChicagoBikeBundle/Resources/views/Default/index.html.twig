@@ -36,6 +36,10 @@
         </div>
 
         <h2>Bike relocations</h2>
+        <div>
+            <button type="button" id="relocation_from_button">From stations</button>
+            <button type="button" id="relocation_to_button">To stations</button>
+        </div>
         <div id="relocation_data_container">
             <div id="relocation_from">
                 <h3>Top source stations</h3>
@@ -50,7 +54,19 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div id="relocation_to"></div>
+            <div id="relocation_to">
+                <h3>Top destination stations</h3>
+                <p>Stations with top amounts of bikes delivered to.</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Station</th>
+                        <th>Relocated to</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
             <div id="relocation_route"></div>
         </div>
 
