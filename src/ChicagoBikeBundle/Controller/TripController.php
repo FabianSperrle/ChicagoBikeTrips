@@ -7,13 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Route("/trips")
  * Class TripController
  */
 class TripController extends Controller
 {
     /**
-     * @Route("/per_week", name="trips_per_week", options={"expose": true})
+     * @Route("/trips/per_week", name="trips_per_week", options={"expose": true})
      * @return JsonResponse
      */
     public function tripsPerWeekAction()
@@ -25,7 +24,7 @@ class TripController extends Controller
     }
 
     /**
-     * @Route("/top/{amount}", requirements={"amount": "\d+"}, name="top_trips", options={"expose": true})
+     * @Route("/trips/top/{amount}", requirements={"amount": "\d+"}, name="top_trips", options={"expose": true})
      */
     public function topTripsAction($amount)
     {
@@ -49,7 +48,7 @@ class TripController extends Controller
     }
 
     /**
-     * @Route("/top/{amount}/{timestamp}", requirements={"amount": "\d+", "timestamp": "\d+"}, name="top_trips_per_month", options={"expose": true})
+     * @Route("/trips/top/{amount}/{timestamp}", requirements={"amount": "\d+", "timestamp": "\d+"}, name="top_trips_per_month", options={"expose": true})
      */
     public function topTripsPerMonthAction($amount, $timestamp)
     {
