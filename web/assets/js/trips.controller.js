@@ -7,7 +7,7 @@ function addLineChart() {
 
     var vis = d3.select('#trips-per-day'),
         WIDTH = 1000,
-        HEIGHT = 500,
+        HEIGHT = 300,
         MARGINS = {
             top: 20,
             right: 20,
@@ -90,24 +90,24 @@ function addLineChart() {
 
     vis.append('svg:path')
         .attr('d', customersLineFunc(data.trips_per_week))
-        .attr('stroke', 'blue')
+        .attr('stroke', '#18f')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
-    addScatterPlot('customers', 'blue');
+    addScatterPlot('customers', '#18f');
 
     vis.append('svg:path')
         .attr('d', subscribersLineFunc(data.trips_per_week))
-        .attr('stroke', 'red')
+        .attr('stroke', '#ff3e04')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
-    addScatterPlot('subscribers', 'red');
+    addScatterPlot('subscribers', '#ff3e04');
 
     var legendRectSize = 18;
     var legendSpacing = 4;
     var legend = vis.selectAll('.legend')
-        .data([{name: "Customers", color: "blue"}, {name: "Subscribers", color: "red"}])
+        .data([{name: "Customers", color: "#18f"}, {name: "Subscribers", color: "#ff3e04"}])
         .enter()
         .append('g')
         .attr('class', 'legend')

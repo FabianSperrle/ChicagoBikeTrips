@@ -42,6 +42,14 @@
                 font-size: 18px;
                 margin-left: -14px;
             }
+
+            .clearfix:after {
+                content: ".";
+                clear: both;
+                display: block;
+                visibility: hidden;
+                height: 0px;
+            }
         </style>
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
@@ -55,6 +63,7 @@
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
         <script src="{{ asset('assets/js/spin.min.js') }}"></script>
+        <script src="{{ asset('assets/js/plotly.min.js') }}"></script>
     </head>
 
     <body>
@@ -69,11 +78,18 @@
 
         <h2>Trips per day</h2>
         <div id="trips-container">
-            <svg id="trips-per-day" width="1000" height="500"></svg>
+            <svg id="trips-per-day" width="1000" height="300"></svg>
         </div>
 
+        <h2>Average Trip Duration</h2>
         <div id="stats-container">
-            <div id="stats" width="800" height="300"></div>
+            <svg id="stats" width="1000" height="300"></svg>
+        </div>
+
+        <h2>Round Trip Percentage</h2>
+        <div id="pie-container" style="width:100%;" class="clearfix">
+            <div id="customer_pie" style="float:left"></div>
+            <div id="subscriber_pie" style="float:right"></div>
         </div>
 
         <h2>Bike relocations</h2>

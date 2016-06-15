@@ -39,7 +39,7 @@ LEAFLET ICONS
 }
 
 .pin.highlight {
-    background-color: red;
+    background-color: #f5a021;
 }
 
 .pin:after {
