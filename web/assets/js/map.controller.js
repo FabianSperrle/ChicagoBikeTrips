@@ -96,6 +96,26 @@ var addHeatLayer = function () {
     control.addOverlay(heat, "Divvy Station Heat Map", "Visualizations");
 }
 
+var lineLayer = null;
+function addTopTripsLayer(data) {
+    if (lineLayer != null) {
+        map.removeLayer(lineLayer);
+    }
+    var lines = [];
+
+    for (var i = 0; i < data.length; i++) {
+        var current = data[i];
+        var latlng_from = L.latLng(current.from_lat, current.from_long);
+        var latlng_to = L.latLng(current.to_lat, current.to_long);
+
+        lines.push(L.polyline([latlng_from, latlng_to]));
+    }
+
+    lineLayer = L.layerGroup(lines);
+    control.addOverlay(lineLayer, "Top Trips")
+    lineLayer.addTo(map);
+}
+
 function addBikeTracks() {
     var routes = L.geoJson(data.tracks, {
         style: {
@@ -108,8 +128,6 @@ function addBikeTracks() {
 }
 
 function addBikeRacks() {
-    console.log("adding racks");
-    console.log(data.racks);
     var geojsonMarkerOptions = {
         radius: 1,
         fillColor: "#ff7800",
@@ -131,25 +149,6 @@ function addBikeRacks() {
     control.addOverlay(racks, "Bike Stations");
 }
 
-var lineLayer = null;
-function addTopTripsLayer(data) {
-    if (lineLayer != null) {
-        map.removeLayer(lineLayer);
-    }
-    var lines = [];
-
-    for (var i = 0; i < data.length; i++) {
-        var current = data[i];
-        var latlng_from = L.latLng(current.from_lat, current.from_long);
-        var latlng_to = L.latLng(current.to_lat, current.to_long);
-
-        lines.push(L.polyline([latlng_from, latlng_to]));
-    }
-
-    lineLayer = L.layerGroup(lines);
-    control.addOverlay(lineLayer, "Top Trips")
-    lineLayer.addTo(map);
-}
 
 data.on('loaded', addPointsLayer);
 data.on('loaded', addClusterLayer);

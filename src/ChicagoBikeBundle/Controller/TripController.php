@@ -76,6 +76,35 @@ LIMIT :limit');
     }
 
     /**
+     * @Route("/trips/statistics/length", name="avg_trip_length", options={"expose": true})
+     */
+    public function getAverageTripLength() {
+        $conn = $this->get('database_connection');
+        $query = $conn->executeQuery("select * 
+from crosstab(\$\$select extract (epoch from date_trunc)::text as month, usertype, (date_part('minutes', avg) + (date_part('seconds', avg) / 60))::text
+		from avg_trip_length
+		order by 1,2\$\$)
+as ct(Month text , Customer text, Subscriber text)
+");
+        $data = $query->fetchAll();
+        
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/trips/statistics/roundtrips", name="round_trip", options={"expose": true})
+     * @return JsonResponse
+     */
+    public function getRoundTripPercentage() {
+        $data = [];
+
+        $data['subscribers'] = round(34382 / 2066429 * 100, 2);
+        $data['customers'] = round(104481 / 1147992 * 100, 2);
+        
+        return new JsonResponse($data);
+    }
+
+    /**
      * @Route("/relocation/top_from/{limit}", name="relocation_top_from", options={"expose": true})
      */
     public function getRelocationTopFromAction($limit)

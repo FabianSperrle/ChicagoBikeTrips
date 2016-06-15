@@ -8,6 +8,7 @@ function DataController() {
     this.racks = {};
     this.markerlist = {};
     this.trips_per_week = {};
+    this.avg_trip_length = {};
 }
 
 DataController.prototype.loadTop5 = function(timestamp) {
@@ -69,3 +70,14 @@ d3.json(Routing.generate("trips_per_week"), function (error, json) {
 
     data.emit('trips_per_day');
 });
+
+d3.json(Routing.generate("avg_trip_length"), function (err, json) {
+    if (err) throw err;
+
+    json = json.map(function (elem) {
+        elem.month = new Date(elem.month * 1000);
+        return elem;
+    });
+    data.avg_trip_length = json;
+    data.emit('avg_trip_length');
+})

@@ -51,7 +51,6 @@ svg.append("g")
         .tickValues([timeScale.domain()[0], timeScale.domain()[1]]))
     .select(".domain")
     .select(function() {
-        console.log(this);
         return this.parentNode.appendChild(this.cloneNode(true));
     })
     .attr("class", "halo");
@@ -75,7 +74,7 @@ handle.append("path")
 
 handle.append('text')
     .text(startingValue)
-    .attr("transform", "translate(" + (-18) + " ," + (height / 2 - 25) + ")");
+    .attr("transform", "translate(" + (-50) + " ," + (height / 2 - 25) + ")");
 
 slider
     .call(brush.event)
@@ -97,8 +96,6 @@ function load_data() {
     date = d3.time.day.floor(date);
     d3.time.month.floor(date);
     var timestamp = date.getTime() / 1000 + 7200;
-    console.log(date);
-    console.log(timestamp);
     data.loadTop5(timestamp);
     data.loadTopTrips(50, date.getTime() / 1000);
 }
@@ -119,9 +116,7 @@ function processTop5(top5) {
         var s = d.split("-");
         count.push(s[0]);
         stations.push(s[1]);
-    };
-    console.log("stations = " + stations);
-    console.log("count = " + count);
+    }
 
     for (let i = 0; i < data.all.length; i++) {
         let d = data.all[i];
@@ -132,17 +127,13 @@ function processTop5(top5) {
         }
     }
 
-    console.log("stations = " + stations);
-
     var divIcon = L.divIcon({
         className: 'pin highlight',
         iconSize: [20, 20]
     });
 
     for (let i = 0; i < 5; i++) {
-        console.log("i = " + i);
         let marker_id = data.all[stations[i]].layerId;
-        console.log("marker_id = " + marker_id);
         let marker = points.getLayer(marker_id);
         let latlng;
         if (marker == undefined) {
@@ -179,7 +170,6 @@ function processTop5(top5) {
         points.addLayer(newMarker);
         
         let newMarkerId = points.getLayerId(newMarker);
-        console.log("stations[i] = " + stations[i]);
         data.all[stations[i]].layerId = newMarkerId;
         
         if (top5Ids[i] != undefined)
@@ -187,8 +177,6 @@ function processTop5(top5) {
                 points.removeLayer(top5Ids[i]);
         top5Ids[i] = newMarkerId;
     }
-    console.log("top5Ids = " + top5Ids);
-    console.log("stations = " + stations);
 }
 
 data.on('top5', processTop5);

@@ -1,28 +1,29 @@
-function addLineChart() {
-    var div = d3.select("body").append("div")
+function tripLengthChart() {
+    var div = d3.select("body")
+        .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
     var formatTime = d3.time.format("%d.%m.%Y");
 
-    var vis = d3.select('#trips-per-day'),
-        WIDTH = 1000,
-        HEIGHT = 500,
+    var vis = d3.select('#stats'),
+        WIDTH = 800,
+        HEIGHT = 300,
         MARGINS = {
             top: 20,
             right: 20,
             bottom: 20,
             left: 50
         },
-        xRange = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(data.trips_per_week, function(d) {
-            return d.week;
-        }), d3.max(data.trips_per_week, function(d) {
-            return d.week;
+        xRange = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(data.avg_trip_length, function(d) {
+            return d.month;
+        }), d3.max(data.avg_trip_length, function(d) {
+            return d.month;
         })]),
-        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(data.trips_per_week, function(d) {
-            return Math.min(d.customers, d.subscribers);
-        }), d3.max(data.trips_per_week, function(d) {
-            return Math.max(d.customers, d.subscribers);
+        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(data.avg_trip_length, function(d) {
+            return Math.min(d.customer, d.subscriber);
+        }), d3.max(data.avg_trip_length, function(d) {
+            return Math.max(d.customer, d.subscriber);
         })]),
         xAxis = d3.svg.axis()
             .scale(xRange)
@@ -46,24 +47,24 @@ function addLineChart() {
 
     var customersLineFunc = d3.svg.line()
         .x(function(d) {
-            return xRange(d.week);
+            return xRange(d.month);
         })
         .y(function(d) {
-            return yRange(d.customers);
+            return yRange(d.customer);
         })
         .interpolate('linear');
 
     var subscribersLineFunc = d3.svg.line()
         .x(function(d) {
-            return xRange(d.week);
+            return xRange(d.month);
         })
         .y(function(d) {
-            return yRange(d.subscribers);
+            return yRange(d.subscriber);
         })
         .interpolate('linear');
 
 
-
+/*
     function addScatterPlot(type, color) {
         vis.selectAll("dot")
             .data(data.trips_per_week)
@@ -86,23 +87,23 @@ function addLineChart() {
                     .duration(500)
                     .style("opacity", 0);
             });
-    }
+    }*/
 
     vis.append('svg:path')
-        .attr('d', customersLineFunc(data.trips_per_week))
+        .attr('d', customersLineFunc(data.avg_trip_length))
         .attr('stroke', 'blue')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
-    addScatterPlot('customers', 'blue');
+    //addScatterPlot('customers', 'blue');
 
     vis.append('svg:path')
-        .attr('d', subscribersLineFunc(data.trips_per_week))
+        .attr('d', subscribersLineFunc(data.avg_trip_length))
         .attr('stroke', 'red')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
-    addScatterPlot('subscribers', 'red');
+    //addScatterPlot('subscribers', 'red');
 
     var legendRectSize = 18;
     var legendSpacing = 4;
@@ -131,6 +132,4 @@ function addLineChart() {
         .text(function(d) { return d.name; });
 }
 
-
-
-data.on('trips_per_day', addLineChart);
+data.on('avg_trip_length', tripLengthChart);
