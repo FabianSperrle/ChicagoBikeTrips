@@ -23,6 +23,8 @@ RelocationController.prototype.showRelocationFrom = function () {
                 let station = data.all[stationIndex];
                 container.append("<tr><td>" + station.name + "</td><td>" + self.from[i].count + "</td></tr>");
             }
+            $('#relocation_data_container').children().hide();
+            $('#relocation_from').show();
         });
     } else {
         $('#relocation_data_container').children().hide();
@@ -43,6 +45,8 @@ RelocationController.prototype.showRelocationTo = function () {
                 let station = data.all[stationIndex];
                 container.append("<tr><td>" + station.name + "</td><td>" + self.to[i].count + "</td></tr>");
             }
+            $('#relocation_data_container').children().hide();
+            $('#relocation_to').show();
         });
     } else {
         $('#relocation_data_container').children().hide();
