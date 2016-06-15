@@ -100,6 +100,7 @@ var lineLayer = null;
 function addTopTripsLayer(data) {
     if (lineLayer != null) {
         map.removeLayer(lineLayer);
+        control.removeLayer(lineLayer);
     }
     var lines = [];
 
@@ -112,8 +113,8 @@ function addTopTripsLayer(data) {
     }
 
     lineLayer = L.layerGroup(lines);
-    control.addOverlay(lineLayer, "Top Trips")
     lineLayer.addTo(map);
+    control.addOverlay(lineLayer, "Top Trips");
 }
 
 function addBikeTracks() {
