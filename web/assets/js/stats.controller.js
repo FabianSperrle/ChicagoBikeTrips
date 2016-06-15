@@ -96,7 +96,7 @@ function tripLengthChart() {
 };
 
 var rt_customers = [{
-    values: [1.66, 98.34],
+    values: [9.1, 90.9],
     labels: ['Round Trip', 'One-Way'],
     type: 'pie',
     marker: {
@@ -105,7 +105,7 @@ var rt_customers = [{
 }];
 
 var rt_subscribers = [{
-    values: [16.6, 83.4],
+    values: [1.66, 98.34],
     labels: ['Round Trip', 'One-Way'],
     type: 'pie',
     marker: {
