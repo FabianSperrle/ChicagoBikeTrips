@@ -3,6 +3,7 @@
 function DataController() {
     telegraph(this);
     this.all = {};
+    this.stationIndex = {};
     this.tracks = {};
     this.racks = {};
     this.markerlist = {};
@@ -25,7 +26,7 @@ DataController.prototype.loadTopTrips = function(amount, timestamp) {
 
         self.emit('top_trips_per_month', json);
     });
-}
+};
 
 var data = new DataController();
 
@@ -34,14 +35,17 @@ d3.json(Routing.generate("list_stations"), function (error, json) {
     if (error) throw error;
 
     data.all = json;
+    for (let i = 0; i < data.all.length; i++) {
+        data.stationIndex[data.all[i].id] = i;
+    }
     data.emit('loaded');
 });
 
 d3.json("/assets/data/bike_tracks.geojson", function(error, json) {
     if (error) throw error;
-    
+
     data.tracks = json;
-    
+
     data.emit('bike_tracks');
 });
 

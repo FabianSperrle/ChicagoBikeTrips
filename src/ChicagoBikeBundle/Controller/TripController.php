@@ -74,4 +74,38 @@ LIMIT :limit');
 
         return new JsonResponse($data);
     }
+
+    /**
+     * @Route("/relocation/top_from/{limit}", name="relocation_top_from", options={"expose": true})
+     */
+    public function getRelocationTopFromAction($limit)
+    {
+        $conn = $this->get('database_connection');
+        $result = $conn->executeQuery(<<<SQL
+SELECT fromstation, COUNT(*) AS count 
+FROM bike_relocation r
+GROUP BY fromstation
+ORDER BY count DESC
+LIMIT :limit
+SQL
+            , [':limit' => $limit]);
+        return new JsonResponse($result->fetchAll());
+    }
+
+    /**
+     * @Route("/relocation/top_to/{limit}", name="relocation_top_to", options={"expose": true})
+     */
+    public function getRelocationTopToAction($limit)
+    {
+        $conn = $this->get('database_connection');
+        $result = $conn->executeQuery(<<<SQL
+SELECT tostation, COUNT(*) AS count 
+FROM bike_relocation r
+GROUP BY tostation
+ORDER BY count DESC
+LIMIT :limit
+SQL
+            , [':limit' => $limit]);
+        return new JsonResponse($result->fetchAll());
+    }
 }

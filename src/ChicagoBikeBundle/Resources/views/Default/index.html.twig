@@ -30,13 +30,34 @@
             <div id="slider"></div>
         </div>
 
+        <h2>Trips per day</h2>
         <div id="trips-container">
             <svg id="trips-per-day" width="1000" height="500"></svg>
+        </div>
+
+        <h2>Bike relocations</h2>
+        <div id="relocation_data_container">
+            <div id="relocation_from">
+                <h3>Top source stations</h3>
+                <p>Stations with top amounts of bikes picked up for transport to another station.</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Station</th>
+                        <th>Relocated from</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="relocation_to"></div>
+            <div id="relocation_route"></div>
         </div>
 
         <script src="{{ asset('assets/js/data.controller.js') }}"></script>
         <script src="{{ asset('assets/js/map.controller.js') }}"></script>
         <script src="{{ asset('assets/js/trips.controller.js') }}"></script>
         <script src="{{ asset('assets/js/slider.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/relocation_controller.js') }}"></script>
     </body>
 </html>
