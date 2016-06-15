@@ -19,7 +19,7 @@ class TripController extends Controller
     public function tripsPerWeekAction()
     {
         $conn = $this->get('database_connection');
-        $data = $conn->executeQuery('SELECT cast(extract(epoch from week) AS INTEGER) AS week, customers, subscribers FROM trips_per_week')->fetchAll();
+        $data = $conn->executeQuery('SELECT cast(extract(EPOCH FROM week) AS INTEGER) AS week, customers, subscribers FROM trips_per_week')->fetchAll();
 
         return new JsonResponse($data);
     }
@@ -56,14 +56,15 @@ class TripController extends Controller
         $conn = $this->get('database_connection');
         $timestamp = (new \DateTime())
             ->setTimestamp($timestamp)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTime(0, 0, 0)
             ->modify("first day of this month")
             ->getTimestamp();
-        $timestamp = floor($timestamp/86400)*86400;
         $query = $conn->prepare('SELECT s_from.latitude from_lat, s_from.longitude from_long, s_to.latitude to_lat, s_to.longitude to_long
 FROM top_trips_per_month tt
 LEFT JOIN station s_from ON s_from.id = tt.fromstation
 LEFT JOIN station s_to ON s_to.id = tt.tostation
-WHERE fromstation != tostation AND extract(epoch FROM month) = :month
+WHERE fromstation != tostation AND extract(EPOCH FROM month) = :month
 ORDER BY count DESC
 LIMIT :limit');
         $query->execute([
