@@ -57,7 +57,7 @@ RelocationController.prototype.showRelocationTo = function () {
 var relocationController = new RelocationController();
 
 
-data.on('loaded', function () {
+data.on('loaded_stations', function () {
     relocationController.initialize();
 });
 

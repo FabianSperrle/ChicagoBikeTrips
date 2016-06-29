@@ -151,8 +151,8 @@ function addBikeRacks() {
 }
 
 
-data.on('loaded', addPointsLayer);
-data.on('loaded', addClusterLayer);
-data.on('loaded', addHeatLayer);
+data.on('loaded_stations', addPointsLayer);
+data.on('loaded_stations', addClusterLayer);
+data.on('loaded_stations', addHeatLayer);
 data.on('bike_tracks', addBikeTracks);
 data.on('racks', addBikeRacks);

@@ -36,7 +36,7 @@ d3.json(Routing.generate("list_stations"), function (error, json) {
     for (let i = 0; i < data.stations.length; i++) {
         data.stationIndex[data.stations[i].id] = i;
     }
-    data.emit('loaded');
+    data.emit('loaded_stations');
 });
 
 d3.json("/assets/data/bike_tracks.geojson", function(error, json) {
