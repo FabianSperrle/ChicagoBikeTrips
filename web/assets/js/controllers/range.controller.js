@@ -11,7 +11,7 @@ function RangeController() {
     };
 
     this.updateFromBrush = function () {
-        let date = brush.extent()[0];
+        let date = slider.brush.extent()[0];
         date = d3.time.day.floor(date);
         let timestamp = date.getTime() / 1000;
         range.updateRange(timestamp, timestamp + 60*60*24);
