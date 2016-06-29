@@ -5,6 +5,7 @@ namespace ChicagoBikeBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class TripController
@@ -136,5 +137,42 @@ LIMIT :limit
 SQL
             , [':limit' => $limit]);
         return new JsonResponse($result->fetchAll());
+    }
+
+    /**
+     * @Route("/trips/top/range/{from}/{to}", requirements={"from": "\d+", "to": "\d+"})
+     * @param Request $request
+     * @param $from
+     * @param $to
+     * @return JsonResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function getTopTripsInRange(Request $request, $from, $to)
+    {
+        $threshold = $request->query->getInt('threshold');
+        $start = new \DateTime();
+        $start->setTimestamp($from)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTime(0,0,0);
+
+        $end = new \DateTime();
+        $end->setTimestamp($to)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTime(0,0,0)
+            ->modify('+1 day');
+
+        $conn = $this->get('database_connection');
+
+        $q = $conn->prepare('SELECT fromstation, tostation, SUM(count) AS sum
+FROM top_trips_per_day
+WHERE day BETWEEN :start AND :end
+GROUP BY fromstation, tostation HAVING SUM(count) >= :threshold
+ORDER BY sum DESC');
+        $q->execute([
+            ':start' => $start->format('Y-m-d'),
+            ':end' => $end->format('Y-m-d'),
+            ':threshold' => $threshold
+        ]);
+        return new JsonResponse($q->fetchAll());
     }
 }
