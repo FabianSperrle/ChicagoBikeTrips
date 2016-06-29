@@ -1,8 +1,8 @@
 "use strict";
 function SliderController() {
 
-    this.top5Ids = [undefined, undefined, undefined, undefined, undefined];
-    this.backup = undefined;
+    var top5Ids = [undefined, undefined, undefined, undefined, undefined];
+    var backup = undefined;
 
     this.brush = null;
 
@@ -109,8 +109,8 @@ function SliderController() {
     };
     
     this.processTop5 = (function (top5) {
-        if (this.backup == undefined) {
-            this.backup = data.stations;
+        if (backup == undefined) {
+            backup = data.stations;
         }
         top5 = top5[0];
         var stations = [];
@@ -143,8 +143,8 @@ function SliderController() {
             let latlng;
             if (marker == undefined) {
                 latlng = {
-                    lat: this.backup[stations[i]].latitude,
-                    lng: this.backup[stations[i]].longitude
+                    lat: backup[stations[i]].latitude,
+                    lng: backup[stations[i]].longitude
                 };
             } else {
                 latlng = marker.getLatLng();
@@ -152,7 +152,7 @@ function SliderController() {
 
             let title;
             if (marker == undefined) {
-                title = this.backup[stations[i]].name;
+                title = backup[stations[i]].name;
             } else {
                 title = marker.options.title;
             }
@@ -163,9 +163,9 @@ function SliderController() {
             });
             let cont;
             if (marker == undefined) {
-                let date = new Date(this.backup[stations[i]].onlineDate.timestamp * 1000);
+                let date = new Date(backup[stations[i]].onlineDate.timestamp * 1000);
                 cont = "<h4>" + title + "</h4>" +
-                    "Capacity: " + this.backup[stations[i]].dpcapacity + " bikes<br />" +
+                    "Capacity: " + backup[stations[i]].dpcapacity + " bikes<br />" +
                     "Online Since: " + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
             } else {
                 cont = marker._popup._content;
@@ -177,10 +177,10 @@ function SliderController() {
             let newMarkerId = points.getLayerId(newMarker);
             data.stations[stations[i]].layerId = newMarkerId;
 
-            if (this.top5Ids[i] != undefined)
-                if (points.getLayer(this.top5Ids[i]) != undefined)
-                    points.removeLayer(this.top5Ids[i]);
-            this.top5Ids[i] = newMarkerId;
+            if (top5Ids[i] != undefined)
+                if (points.getLayer(top5Ids[i]) != undefined)
+                    points.removeLayer(top5Ids[i]);
+            top5Ids[i] = newMarkerId;
         }
     }).bind(this);
 }
