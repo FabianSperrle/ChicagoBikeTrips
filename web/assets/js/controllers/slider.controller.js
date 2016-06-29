@@ -105,7 +105,7 @@ var backup = undefined;
 
 function processTop5(top5) {
     if (backup == undefined) {
-        backup = data.all;
+        backup = data.stations;
     }
     top5 = top5[0];
     var stations = [];
@@ -118,8 +118,8 @@ function processTop5(top5) {
         stations.push(s[1]);
     }
 
-    for (let i = 0; i < data.all.length; i++) {
-        let d = data.all[i];
+    for (let i = 0; i < data.stations.length; i++) {
+        let d = data.stations[i];
         for (let j = 0; j < 5; j++) {
             if (stations[j] == d.id) {
                 stations[j] = i;
@@ -133,7 +133,7 @@ function processTop5(top5) {
     });
 
     for (let i = 0; i < 5; i++) {
-        let marker_id = data.all[stations[i]].layerId;
+        let marker_id = data.stations[stations[i]].layerId;
         let marker = points.getLayer(marker_id);
         let latlng;
         if (marker == undefined) {
@@ -170,7 +170,7 @@ function processTop5(top5) {
         points.addLayer(newMarker);
         
         let newMarkerId = points.getLayerId(newMarker);
-        data.all[stations[i]].layerId = newMarkerId;
+        data.stations[stations[i]].layerId = newMarkerId;
         
         if (top5Ids[i] != undefined)
             if (points.getLayer(top5Ids[i]) != undefined)

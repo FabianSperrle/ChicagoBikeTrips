@@ -31,8 +31,8 @@ var addClusterLayer = function () {
     });
 
     var markerList = [];
-    for (var i = 0; i < data.all.length; i++) {
-        var a = data.all[i];
+    for (var i = 0; i < data.stations.length; i++) {
+        var a = data.stations[i];
         var title = a.name;
 
         var marker = L.marker(L.latLng(a.latitude, a.longitude), {
@@ -50,8 +50,8 @@ var points = L.layerGroup();
 var addPointsLayer = function () {
     data.markerList = [];
 
-    for (var i = 0; i < data.all.length; i++) {
-        var a = data.all[i];
+    for (var i = 0; i < data.stations.length; i++) {
+        var a = data.stations[i];
         var title = a.name;
 
         var divIcon = L.divIcon({
@@ -73,7 +73,7 @@ var addPointsLayer = function () {
         marker.bindPopup(popup);
         points.addLayer(marker);
         
-        data.all[i].layerId = points.getLayerId(marker);
+        data.stations[i].layerId = points.getLayerId(marker);
     }
 
     control.addOverlay(points, "Divvy Stations", "Visualizations");
@@ -83,8 +83,8 @@ var addPointsLayer = function () {
 
 var addHeatLayer = function () {
     var latlngList = [];
-    for (var i = 0; i < data.all.length; i++) {
-        var a = data.all[i];
+    for (var i = 0; i < data.stations.length; i++) {
+        var a = data.stations[i];
         latlngList.push(L.latLng(a.latitude, a.longitude));
     }
 

@@ -2,7 +2,7 @@
 
 function DataController() {
     telegraph(this);
-    this.all = {};
+    this.stations = {};
     this.stationIndex = {};
     this.tracks = {};
     this.racks = {};
@@ -35,9 +35,9 @@ var data = new DataController();
 d3.json(Routing.generate("list_stations"), function (error, json) {
     if (error) throw error;
 
-    data.all = json;
-    for (let i = 0; i < data.all.length; i++) {
-        data.stationIndex[data.all[i].id] = i;
+    data.stations = json;
+    for (let i = 0; i < data.stations.length; i++) {
+        data.stationIndex[data.stations[i].id] = i;
     }
     data.emit('loaded');
 });

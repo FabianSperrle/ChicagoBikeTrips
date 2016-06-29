@@ -20,7 +20,7 @@ RelocationController.prototype.showRelocationFrom = function () {
 
             for(let i = 0; i < self.from.length; i++) {
                 let stationIndex = data.stationIndex[self.from[i].fromstation];
-                let station = data.all[stationIndex];
+                let station = data.stations[stationIndex];
                 container.append("<tr><td>" + station.name + "</td><td>" + self.from[i].count + "</td></tr>");
             }
             $('#relocation_data_container').children().hide();
@@ -42,7 +42,7 @@ RelocationController.prototype.showRelocationTo = function () {
 
             for(let i = 0; i < self.to.length; i++) {
                 let stationIndex = data.stationIndex[self.to[i].tostation];
-                let station = data.all[stationIndex];
+                let station = data.stations[stationIndex];
                 container.append("<tr><td>" + station.name + "</td><td>" + self.to[i].count + "</td></tr>");
             }
             $('#relocation_data_container').children().hide();
