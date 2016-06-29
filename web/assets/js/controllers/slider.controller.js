@@ -91,15 +91,6 @@ function brushed_date() {
     handle.select('text').text(formatDate(value));
 }
 
-function load_data() {
-    var date = brush.extent()[0];
-    date = d3.time.day.floor(date);
-    d3.time.month.floor(date);
-    var timestamp = date.getTime() / 1000 + 7200;
-    data.loadTop5(timestamp);
-    data.loadTopTrips(50, date.getTime() / 1000);
-}
-
 var top5Ids = [undefined, undefined, undefined, undefined, undefined];
 var backup = undefined;
 
