@@ -54,22 +54,29 @@
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 
-        <script src="{{ asset('assets/js/telegraph.min.js') }}"></script>
-        <script src="{{ asset('assets/js/leaflet.min.js') }}"></script>
-        <script src="{{ asset('assets/js/leaflet.layercontrol.js') }}"></script>
-        <script src="{{ asset('assets/js/leaflet.heat.js') }}"></script>
-        <script src="{{ asset('assets/js/leaflet.markercluster.js') }}"></script>
-        <script src="{{ asset('assets/js/d3.min.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/telegraph.min.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/leaflet.min.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/leaflet.layercontrol.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/leaflet.heat.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/leaflet.markercluster.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/d3.min.js') }}"></script>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-        <script src="{{ asset('assets/js/spin.min.js') }}"></script>
-        <script src="{{ asset('assets/js/plotly.min.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/spin.min.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/plotly.min.js') }}"></script>
     </head>
 
     <body>
         <h1>Bike Trips in Chicago</h1>
         <div id="map_container">
             <div id="map"> </div>
+        </div>
+
+        <div id="calendar_container">
+            <div id="calendar">
+                <svg class="day"></svg>
+                <svg class="day"></svg>
+            </div>
         </div>
 
         <div id="slider-container">
@@ -127,11 +134,12 @@
             <div id="relocation_route"></div>
         </div>
 
-        <script src="{{ asset('assets/js/data.controller.js') }}"></script>
-        <script src="{{ asset('assets/js/map.controller.js') }}"></script>
-        <script src="{{ asset('assets/js/trips.controller.js') }}"></script>
-        <script src="{{ asset('assets/js/slider.controller.js') }}"></script>
-        <script src="{{ asset('assets/js/stats.controller.js') }}"></script>
-        <script src="{{ asset('assets/js/relocation_controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/data.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/calendar.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/map.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/trips.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/slider.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/stats.controller.js') }}"></script>
+        <script src="{{ asset('assets/js/controllers/relocation_controller.js') }}"></script>
     </body>
 </html>
