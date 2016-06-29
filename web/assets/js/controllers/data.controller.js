@@ -9,25 +9,22 @@ function DataController() {
     this.markerlist = {};
     this.trips_per_week = {};
     this.avg_trip_length = {};
+
+    this.loadTop5 = (function(from, to) {
+        d3.json(Routing.generate("top5_per_day", {"timestamp": from} ), (function (error, json) {
+            if (error) throw error;
+            this.emit('top5', json);
+        }).bind(this));
+    }).bind(this);
+    
+    this.loadTopTrips = (function(from, to) {
+        d3.json(Routing.generate("top_trips_per_month", {"timestamp": from, "amount": 50} ), (function (error, json) {
+            if (error) throw error;
+
+            this.emit('top_trips_per_month', json);
+        }).bind(this));
+    }).bind(this);
 }
-
-DataController.prototype.loadTop5 = function(timestamp) {
-    var self = this;
-    d3.json(Routing.generate("top5_per_day", {"timestamp": timestamp} ), function (error, json) {
-        if (error) throw error;
-
-        self.emit('top5', json);
-    });
-}
-
-DataController.prototype.loadTopTrips = function(amount, timestamp) {
-    var self = this;
-    d3.json(Routing.generate("top_trips_per_month", {"timestamp": timestamp, "amount": amount} ), function (error, json) {
-        if (error) throw error;
-
-        self.emit('top_trips_per_month', json);
-    });
-};
 
 var data = new DataController();
 

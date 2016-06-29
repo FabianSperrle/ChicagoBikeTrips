@@ -26,7 +26,7 @@ var brush = d3.svg.brush()
     .x(timeScale)
     .extent([startingValue, startingValue])
     .on("brush", brushed_date)
-    .on("brushend", load_data);
+    .on("brushend", range.updateFromBrush);
 
 var svg = d3.select("#slider").append("svg")
     .attr("width", width + margin.left + margin.right)
