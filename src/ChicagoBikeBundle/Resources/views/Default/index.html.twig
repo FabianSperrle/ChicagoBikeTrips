@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
         <link rel="stylesheet" href="{{ asset('assets/css/leaflet.markercluster.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/leaflet.layercontrol.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/calendar.css') }}">
 
         <style>
             p {
@@ -64,6 +65,7 @@
         <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
         <script src="{{ asset('assets/js/libraries/spin.min.js') }}"></script>
         <script src="{{ asset('assets/js/libraries/plotly.min.js') }}"></script>
+        <script src="{{ asset('assets/js/libraries/chroma.min.js') }}"></script>
     </head>
 
     <body>
@@ -74,8 +76,6 @@
 
         <div id="calendar_container">
             <div id="calendar">
-                <svg class="day"></svg>
-                <svg class="day"></svg>
             </div>
         </div>
 

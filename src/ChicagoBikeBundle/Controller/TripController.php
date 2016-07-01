@@ -13,6 +13,18 @@ use Symfony\Component\HttpFoundation\Request;
 class TripController extends Controller
 {
     /**
+     * @Route("/trips/per_day", name="trips_per_day", options={"expose": true})
+     * @return JsonResponse
+     */
+    public function tripsPerDayAction()
+    {
+        $conn = $this->get('database_connection');
+        $data = $conn->executeQuery('SELECT day, customers, subscribers FROM trips_per_day')->fetchAll();
+
+        return new JsonResponse($data);
+    }
+    
+    /**
      * @Route("/trips/per_week", name="trips_per_week", options={"expose": true})
      * @return JsonResponse
      */
