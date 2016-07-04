@@ -58,6 +58,13 @@ function hoverWhileClicked() {
         }
     }
 }
+function endSelect() {
+    isClicked = false;
+    let startDate = new Date(document.getElementById("cell" + startID).getAttribute("datum"));
+    let endDate = new Date(this.getAttribute("datum"));
+
+    range.updateRangeFromDate(startDate, endDate);
+}
 let rect = gs.append("rect")
     .attr("class", "day")
     .attr("width", cellSize)
@@ -72,6 +79,9 @@ let rect = gs.append("rect")
         //return "x" + (d3.time.weekOfYear(new Date(d)) * cellSize) + "y" + (new Date(d).getDay() * cellSize)
         return "cell" + i++;
     })
+    .attr("datum", function (d) {
+        return d;
+    })
     .on('mousedown', function () {
         startSelect.call(this);
     })
@@ -79,7 +89,7 @@ let rect = gs.append("rect")
         hoverWhileClicked.call(this);
     })
     .on('mouseup', function() {
-        isClicked = false;
+        endSelect.call(this);
     });
 
 rect.append("title")
@@ -165,6 +175,15 @@ d3.json("trips/per_day", function (error, json) {
             let o = new Date(d).getDay() * cellSize;
             let c = (cellSize - size(sum[d])) / 2;
             return o + c;
+        })
+        .on('mousedown', function () {
+            startSelect.call(this.previousSibling);
+        })
+        .on('mouseover', function () {
+            hoverWhileClicked.call(this.previousSibling);
+        })
+        .on('mouseup', function() {
+            endSelect.call(this.previousSibling);
         })
         .append('title')
         .text(Object)
