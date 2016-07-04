@@ -10,7 +10,6 @@ var svg = d3.select("#calendar").selectAll("svg")
     .enter().append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr("class", "RdYlGn")
     .append("g")
     .attr("transform", "translate(" + ((width - cellSize * 53) / 2) + "," + (height - cellSize * 7 - 1) + ")");
 
@@ -28,6 +27,37 @@ var gs = svg.selectAll(".day")
     .enter().append("g")
     .datum(format);
 
+let isClicked = false;
+let i = 0;
+let startID = "";
+
+function startSelect() {
+    isClicked = true;
+    startID = +(this.getAttribute("id").substring(4));
+
+    // Reset styles for all rectangles
+    rect.style("stroke-width", "1px");
+    rect.style("stroke", "#ccc");
+
+    // Start by coloring the current rectangle
+    this.style.stroke = "black";
+    this.style.strokeWidth = "2px";
+}
+
+function hoverWhileClicked() {
+    if (isClicked) {
+        // Reset styles for all rectangles
+        rect.style("stroke-width", "1px");
+        rect.style("stroke", "#ccc");
+
+        let id = +(this.getAttribute("id").substring(4));
+        for (let i = startID; i <= id; i++) {
+            d3.select("#cell" + i)
+                .style("stroke", "black")
+                .style("stroke-width", "2px");
+        }
+    }
+}
 let rect = gs.append("rect")
     .attr("class", "day")
     .attr("width", cellSize)
@@ -37,6 +67,19 @@ let rect = gs.append("rect")
     })
     .attr("y", function (d) {
         return new Date(d).getDay() * cellSize;
+    })
+    .attr("id", function(d) {
+        //return "x" + (d3.time.weekOfYear(new Date(d)) * cellSize) + "y" + (new Date(d).getDay() * cellSize)
+        return "cell" + i++;
+    })
+    .on('mousedown', function () {
+        startSelect.call(this);
+    })
+    .on('mouseover', function () {
+        hoverWhileClicked.call(this);
+    })
+    .on('mouseup', function() {
+        isClicked = false;
     });
 
 rect.append("title")
@@ -59,16 +102,16 @@ d3.json("trips/per_day", function (error, json) {
 
     let minRatio = 1, maxRatio = 0;
     let minSum = 10000000, maxSum = 0;
-    json.forEach(function(entry) {
+    json.forEach(function (entry) {
         let r = entry.customers / (entry.customers + entry.subscribers);
         ratio[format(new Date(entry.day))] = r;
-        
+
         if (r > maxRatio) maxRatio = r;
         if (r < minRatio) minRatio = r;
-        
+
         let s = entry.subscribers + entry.customers;
         sum[format(new Date(entry.day))] = s;
-        
+
         if (s > maxSum) maxSum = s;
         if (s < minSum) minSum = s;
 
@@ -77,7 +120,7 @@ d3.json("trips/per_day", function (error, json) {
     minSum = minSum - 0.1 * maxSum;
     console.log(maxSum);
     console.log(minSum);
-    
+
     let color = chroma.scale(['ff3e04', '1188ff'])
         .domain([minRatio, maxRatio]);
 
@@ -88,14 +131,18 @@ d3.json("trips/per_day", function (error, json) {
         .domain([minSum, maxSum])
         .range(d3.range(cellSize));
 
-    
-    gs.filter(function (d) { return d in sum; })
+
+    gs.filter(function (d) {
+        return d in sum;
+    })
         .select("rect")
-        .style("fill", function(d) {
+        .style("fill", function (d) {
             return color2(sum[d]);
         });
-    
-    gs.filter(function (d) { return d in ratio; })
+
+    gs.filter(function (d) {
+        return d in ratio;
+    })
         .append("rect")
         .attr("class", function (d) {
             return "day";
@@ -112,7 +159,7 @@ d3.json("trips/per_day", function (error, json) {
         .attr("x", function (d) {
             let o = d3.time.weekOfYear(new Date(d)) * cellSize;
             let c = (cellSize - size(sum[d])) / 2;
-            return o + c; 
+            return o + c;
         })
         .attr("y", function (d) {
             let o = new Date(d).getDay() * cellSize;
