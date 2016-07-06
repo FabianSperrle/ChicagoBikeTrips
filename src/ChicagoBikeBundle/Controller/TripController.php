@@ -175,11 +175,11 @@ SQL
 
         $conn = $this->get('database_connection');
 
-        $q = $conn->prepare('SELECT fromstation, tostation, SUM(count) AS sum
+        $q = $conn->prepare('SELECT fromstation, tostation, SUM(subscriber) AS subscriber, SUM(customer) AS customer
 FROM top_trips_per_day
 WHERE day BETWEEN :start AND :end
-GROUP BY fromstation, tostation HAVING SUM(count) >= :threshold
-ORDER BY sum DESC');
+GROUP BY fromstation, tostation HAVING SUM(subscriber)+SUM(customer) >= :threshold
+ORDER BY subscriber+customer DESC');
         $q->execute([
             ':start' => $start->format('Y-m-d'),
             ':end' => $end->format('Y-m-d'),
