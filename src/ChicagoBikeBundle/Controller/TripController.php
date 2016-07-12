@@ -179,7 +179,7 @@ SQL
 FROM top_trips_per_day
 WHERE day BETWEEN :start AND :end
 GROUP BY fromstation, tostation HAVING SUM(subscriber)+SUM(customer) >= :threshold
-ORDER BY subscriber+customer DESC');
+ORDER BY SUM(subscriber)+SUM(customer) DESC');
         $q->execute([
             ':start' => $start->format('Y-m-d'),
             ':end' => $end->format('Y-m-d'),
