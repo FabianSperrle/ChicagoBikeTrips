@@ -75,7 +75,7 @@ let rect = gs.append("rect")
     .attr("y", function (d) {
         return new Date(d).getDay() * cellSize;
     })
-    .attr("id", function(d) {
+    .attr("id", function (d) {
         //return "x" + (d3.time.weekOfYear(new Date(d)) * cellSize) + "y" + (new Date(d).getDay() * cellSize)
         return "cell" + i++;
     })
@@ -88,7 +88,7 @@ let rect = gs.append("rect")
     .on('mouseover', function () {
         hoverWhileClicked.call(this);
     })
-    .on('mouseup', function() {
+    .on('mouseup', function () {
         endSelect.call(this);
     });
 
@@ -131,10 +131,12 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
     console.log(maxSum);
     console.log(minSum);
 
-    let color = chroma.scale(['ff3e04', '1188ff'])
+    //let color = chroma.scale(['ff3e04', '1188ff'])
+    let color = chroma.scale(['yellow', 'green'])
         .domain([minRatio, maxRatio]);
 
-    let color2 = chroma.scale(['white', 'green'])
+    //let color2 = chroma.scale(['white', 'green'])
+    let color2 = chroma.scale(['white', '18f'])
         .domain([minSum, maxSum]);
 
     let size = d3.scale.quantize()
@@ -161,10 +163,11 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
             return size(sum[d]);
         })
         .attr("height", function (d) {
-            return size(sum[d]);
+            return size(sum[d]) * ratio[d];
         })
         .style("fill", function (d) {
-            return color(ratio[d]).toString();
+            // return color(ratio[d]).toString();
+            return "#68b300";
         })
         .attr("x", function (d) {
             let o = d3.time.weekOfYear(new Date(d)) * cellSize;
@@ -182,7 +185,7 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         .on('mouseover', function () {
             hoverWhileClicked.call(this.previousSibling);
         })
-        .on('mouseup', function() {
+        .on('mouseup', function () {
             endSelect.call(this.previousSibling);
         })
         .append('title')
@@ -191,6 +194,51 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         .text(function (d) {
             return d + ": " + percent(data[d]);
         });
+    
+
+    gs.filter(function (d) {
+        return d in ratio;
+    })
+        .append("rect")
+        .attr("class", function (d) {
+            return "day";
+        })
+        .attr("width", function (d) {
+            return size(sum[d]);
+        })
+        .attr("height", function (d) {
+            return size(sum[d]) * (1 - ratio[d]);
+        })
+        .style("fill", function (d) {
+            //return color(ratio[d]).toString();
+            return "yellow";
+        })
+        .attr("x", function (d) {
+            let o = d3.time.weekOfYear(new Date(d)) * cellSize;
+            let c = (cellSize - size(sum[d])) / 2;
+            return o + c;
+        })
+        .attr("y", function (d) {
+            let o = new Date(d).getDay() * cellSize;
+            let c = (cellSize - size(sum[d])) / 2;
+            let m = size(sum[d]) * ratio[d];
+            return o + c + m;
+        })
+        .on('mousedown', function () {
+            startSelect.call(this.previousSibling.previousSibling);
+        })
+        .on('mouseover', function () {
+            hoverWhileClicked.call(this.previousSibling.previousSibling);
+        })
+        .on('mouseup', function () {
+            endSelect.call(this.previousSibling.previousSibling);
+        })
+        .append('title')
+        .text(Object)
+        .select("title")
+        .text(function (d) {
+            return d + ": " + percent(data[d]);
+        }); 
 });
 
 function monthPath(t0) {
