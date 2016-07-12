@@ -105,7 +105,7 @@ svg.selectAll(".month")
 
 let sum = {};
 let ratio = {};
-d3.json("trips/per_day", function (error, json) {
+d3.json(Routing.generate('trips_per_day'), function (error, json) {
     if (error) throw error;
 
     console.log(json);
