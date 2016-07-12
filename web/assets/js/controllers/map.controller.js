@@ -111,7 +111,7 @@ function addTopTripsLayer(topTripsData) {
         min = Math.min(min, sum);
     }
 
-    let scale = d3.scale.linear().domain([min, max]).range([1, 15]);
+    let scale = d3.scale.linear().domain([min, max]).range([1, 10]);
 
     for (var i = 0; i < topTripsData.length; i++) {
         var currentTopTrip = topTripsData[i];
