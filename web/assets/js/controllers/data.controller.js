@@ -21,7 +21,7 @@ function DataController() {
     
     this.loadTopTrips = (function(from, to) {
         overlay.show();
-        d3.json(Routing.generate("top_trips_per_month", {"timestamp": from, "amount": 50} ), (function (error, json) {
+        d3.json(Routing.generate("top_trips_in_range", {"from": from, "to": to, "limit": 50} ), (function (error, json) {
             if (error) throw error;
 
             this.emit('top_trips_per_month', json);
