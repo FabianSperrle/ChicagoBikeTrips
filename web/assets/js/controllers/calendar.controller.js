@@ -105,6 +105,7 @@ svg.selectAll(".month")
 
 let sum = {};
 let ratio = {};
+overlay.show('#calendar');
 d3.json(Routing.generate('trips_per_day'), function (error, json) {
     if (error) throw error;
 
@@ -238,7 +239,8 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         .select("title")
         .text(function (d) {
             return d + ": " + percent(data[d]);
-        }); 
+        });
+    overlay.hide('#calendar');
 });
 
 function monthPath(t0) {
