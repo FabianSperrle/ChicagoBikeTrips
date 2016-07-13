@@ -57,6 +57,10 @@
         #map path[fill-rule="evenodd"] {
             fill-opacity: 0.6;
         }
+
+        #histogram {
+            margin-top: 70px;
+        }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -101,9 +105,14 @@
                     <div class="tab-pane active" role="tabpanel" id="map-tab">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-8">
                                     <div id="map_container">
                                         <div id="map"></div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div id="histogram_container">
+                                        <div id="histogram"></div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
@@ -194,5 +203,6 @@
 <!--<script src="{{ asset('assets/js/controllers/slider.controller.js') }}"></script>-->
 <script src="{{ asset('assets/js/controllers/stats.controller.js') }}"></script>
 <script src="{{ asset('assets/js/controllers/relocation_controller.js') }}"></script>
+<script src="{{ asset('assets/js/controllers/histogram.controller.js') }}"></script>
 </body>
 </html>

@@ -21,11 +21,13 @@ function DataController() {
     
     this.loadTopTrips = (function(from, to) {
         overlay.show('#map');
+        overlay.show('#histogram');
         d3.json(Routing.generate("top_trips_in_range", {"from": from, "to": to, "limit": 50} ), (function (error, json) {
             if (error) throw error;
 
             this.emit('top_trips_per_month', json);
             overlay.hide('#map');
+            overlay.hide('#histogram');
         }).bind(this));
     }).bind(this);
 }

@@ -135,8 +135,8 @@ function addTopTripsLayer(topTripsData) {
         decorators[i] = L.polylineDecorator(line, {
             patterns: [
                 {
-                    offset: '100%',
-                    repeat: 40,
+                    offset: '50%',
+                    repeat: '100',
                     fill: c(ratio),
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 10,
