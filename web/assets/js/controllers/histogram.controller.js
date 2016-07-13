@@ -31,7 +31,11 @@ let updateHistogram = function(json) {
         return json.map(function (d) {
             return {
                 x: d.index,
-                y: d[type]
+                y: d[type],
+                from: d.fromstation,
+                to: d.tostation,
+                customer: d.customer,
+                subscriber: d.subscriber
             };
         });
     }));
@@ -71,6 +75,9 @@ let updateHistogram = function(json) {
         })
         .style("stroke", "#CCE5E5");
 
+    let histogramElem = $('#histogram');
+    histogramElem.find('[data-toggle="tooltip"]').tooltip('destroy');
+
     // Add a rect for each date.
     let histo_rect = freq.selectAll("rect")
         .data(Object)
@@ -86,9 +93,22 @@ let updateHistogram = function(json) {
             return height - y(d.y);
         })
         .attr("width", x.rangeBand())
+        .attr("title", function (d) {
+            let from = data.stations[data.stationIndex[d.from]];
+            let to = data.stations[data.stationIndex[d.to]];
+            return "From: " + from.name + "<br>To: " + to.name + "<br>Customer: " + d.customer
+                + "<br>Subscriber: " + d.subscriber + "<br>Gesamt: " + (d.customer+d.subscriber);
+        })
+        .attr("data-toggle", "tooltip")
+        .attr("data-placement", "right")
         .attr("id", function (d) {
             return d["year"];
         });
+
+    histogramElem.find('[data-toggle="tooltip"]').tooltip({
+        container: '#histogram',
+        html: true
+    });
 };
 
 data.on('top_trips_per_month', updateHistogram);

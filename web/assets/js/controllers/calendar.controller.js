@@ -192,7 +192,7 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
             return color2(sum[d]);
         });
 
-    let tooltipElements = $('[data-toggle="tooltip"]');
+    let tooltipElements = $('#calendar').find('[data-toggle="tooltip"]');
     tooltipElements.tooltip('destroy');
 
 
@@ -273,7 +273,7 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
             endSelect.call(this.previousSibling.previousSibling);
         });
     tooltipElements.tooltip({
-        container: 'body',
+        container: '#calendar',
         html: true
     });
     overlay.hide('#calendar');
