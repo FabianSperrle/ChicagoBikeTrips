@@ -61,7 +61,6 @@ var addPointsLayer = function () {
         var marker = L.marker(L.latLng(a.latitude, a.longitude), {
             title: title,
             icon: divIcon,
-            rotationAngle: -45
         });
 
         var date = new Date(a.onlineDate.timestamp * 1000);
@@ -95,6 +94,8 @@ var addHeatLayer = function () {
     control.addOverlay(heat, "Divvy Station Heat Map", "Visualizations");
 }
 
+var weight_map = {};
+var color_map = {};
 var lineLayer = null;
 function addTopTripsLayer(topTripsData) {
     if (lineLayer != null) {
@@ -122,6 +123,9 @@ function addTopTripsLayer(topTripsData) {
 
         let ratio = +currentTopTrip.customer / (+currentTopTrip.customer + +currentTopTrip.subscriber);
         let weight = scale(currentTopTrip.subscriber + currentTopTrip.customer);
+        
+        weight_map["line" + from.id + to.id] = weight;
+        color_map["line" + from.id + to.id] = c(ratio);
         
         let line = L.polyline([latlng_from, latlng_to], {
             weight: weight,
@@ -240,9 +244,92 @@ function processTopStations(topStations) {
             icon: icon
         }));
     }
-    stationsLayer = L.layerGroup(markers).addTo(map);
+    stationsLayer = L.layerGroup(markers);
+    control.addOverlay(stationsLayer, "Top 5 Stations");
+    stationsLayer.addTo(map);
 }
 
+var relocationFROMLayer;
+function relocationFROM(json) {
+    if (relocationFROMLayer != null) {
+        map.removeLayer(relocationFROMLayer);
+    }
+    
+    let min = Number.POSITIVE_INFINITY;
+    let max = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < json.length; i++) {
+        let v = json[i]['count'];
+        if (v < min) min = v;
+        if (v > max) max = v;
+    }
+    console.log(min);
+    console.log(max);
+
+    let size = d3.scale.log()
+        .base(Math.E)
+        .domain([min, max])
+        .range([10, 50]);
+
+    let markers = [];
+    for (let i = 0; i < json.length; i++) {
+        let count = json[i]['count'];
+        
+        console.log(size(count));
+        
+        let icon = L.divIcon({
+            className: 'relocation from',
+            iconSize: new L.Point(size(count), size(count))
+        });
+
+        let station = data.stations[data.stationIndex[json[i].station]];
+        markers.push(L.marker([station.latitude, station.longitude], {
+            icon: icon
+        }));
+    }
+    relocationFROMLayer = L.layerGroup(markers);
+    control.addOverlay(relocationFROMLayer, "Relocations: Station Full");
+}
+
+var relocationTOLayer;
+function relocationTO(json) {
+    if (relocationTOLayer != null) {
+        map.removeLayer(relocationTOLayer);
+    }
+
+    let min = Number.POSITIVE_INFINITY;
+    let max = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < json.length; i++) {
+        let v = json[i]['count'];
+        if (v < min) min = v;
+        if (v > max) max = v;
+    }
+    console.log(min);
+    console.log(max);
+
+    let size = d3.scale.log()
+        .base(Math.E)
+        .domain([min, max])
+        .range([10, 50]);
+
+    let markers = [];
+    for (let i = 0; i < json.length; i++) {
+        let count = json[i]['count'];
+
+        console.log(size(count));
+
+        let icon = L.divIcon({
+            className: 'relocation to',
+            iconSize: new L.Point(size(count), size(count))
+        });
+
+        let station = data.stations[data.stationIndex[json[i].station]];
+        markers.push(L.marker([station.latitude, station.longitude], {
+            icon: icon
+        }));
+    }
+    relocationTOLayer = L.layerGroup(markers);
+    control.addOverlay(relocationTOLayer, "Relocations: Station Empty");
+}
 
 data.on('loaded_stations', addPointsLayer);
 data.on('loaded_stations', addClusterLayer);
@@ -252,3 +339,6 @@ data.on('bike_tracks', addBikeTracks);
 data.on('racks', addBikeRacks);
 data.on('regions', addRegions);
 data.on('top5', processTopStations);
+
+data.on('top_bike_relocation_from', relocationFROM);
+data.on('top_bike_relocation_to', relocationTO);

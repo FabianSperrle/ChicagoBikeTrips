@@ -42,6 +42,18 @@ LEAFLET ICONS
     background-color: #f5a021;
 }
 
+.relocation {
+    border-radius: 200px;
+}
+
+.relocation.from {
+    background-color: rgba(255, 0, 255, 0.4);
+}
+
+.relocation.to {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
 .pin:after {
     content: '';
     width: 6px;
