@@ -3,7 +3,8 @@ var width = 1500,
     cellSize = 25; // cell size
 
 var percent = d3.format(".1%"),
-    format = d3.time.format("%Y-%m-%d");
+    format = d3.time.format("%Y-%m-%d"),
+    month_format = d3.time.format("%b");
 
 var svg = d3.select("#calendar").selectAll("svg")
     .data(d3.range(2013, 2015))
@@ -14,11 +15,20 @@ var svg = d3.select("#calendar").selectAll("svg")
     .attr("transform", "translate(" + ((width - cellSize * 53) / 2) + "," + (height - cellSize * 7 - 1) + ")");
 
 svg.append("text")
-    .attr("transform", "translate(-6," + cellSize * 3.5 + ")rotate(-90)")
+    .attr("transform", "translate(-26," + cellSize * 3.5 + ")rotate(-90)")
     .style("text-anchor", "middle")
     .text(function (d) {
         return d;
     });
+
+svg.select(".weekday")
+    .data(d3.range(0, 7))
+    .append("text")
+    .attr("transform", function(d) {
+        return "translate(-6," + d * cellSize * 3.5 + ")rotate(-90)";
+    })
+    .style("text-anchor", "middle")
+    .html("F");
 
 var gs = svg.selectAll(".day")
     .data(function (d) {
@@ -95,13 +105,27 @@ let rect = gs.append("rect")
 rect.append("title")
     .text(Object);
 
-svg.selectAll(".month")
+let month_groups = svg.selectAll(".month")
     .data(function (d) {
         return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1));
     })
-    .enter().append("path")
+    .enter().append("g");
+
+month_groups.append("path")
     .attr("class", "month")
     .attr("d", monthPath);
+
+
+month_groups.append("text")
+    //.attr("transform", "translate(-6," + cellSize * 3.5 + ")")
+    .attr("z-index", 1000000)
+    .style("text-anchor", "middle")
+    .attr("transform", function(d, i) {
+        return "translate(" + (75 + (i * 4.3 * cellSize)) + ", 0)";
+    })
+    .text(function (d) {
+        return month_format(d);
+    });
 
 let sum = {};
 let ratio = {};
