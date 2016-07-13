@@ -103,6 +103,22 @@ let updateHistogram = function(json) {
         .attr("data-placement", "right")
         .attr("id", function (d) {
             return d["year"];
+        })
+        .on('mouseover', function(d) {
+            d3.select('.line' + d.from + d.to)
+                .attr('stroke-width', 20)
+                .attr('stroke', '#f18')
+                .attr('opacity', 1)
+                .style('z-index', 1000);
+            console.log("in");
+        })
+        .on('mouseout', function(d) {
+            d3.select('.line' + d.from + d.to)
+                .attr('stroke-width', weight_map["line" + d.from + d.to])
+                .attr('stroke', color_map["line" + d.from + d.to])
+                .attr('opacity', 0.6)
+                .style('z-index', 2);
+            console.log("out");
         });
 
     histogramElem.find('[data-toggle="tooltip"]').tooltip({
