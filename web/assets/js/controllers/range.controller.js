@@ -26,3 +26,5 @@ var range = new RangeController();
 
 range.on('range_changed', data.loadTop5);
 range.on('range_changed', data.loadTopTrips);
+range.on('range_changed', data.loadTopRelocationFrom);
+range.on('range_changed', data.loadTopRelocationTo);

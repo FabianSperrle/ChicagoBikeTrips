@@ -66,36 +66,46 @@ as ct(Month text , Customer text, Subscriber text)
     }
 
     /**
-     * @Route("/relocation/top_from/{limit}", name="relocation_top_from", options={"expose": true})
+     * @Route("/relocation/top_from/{from}/{to}/{limit}", name="relocation_top_from", options={"expose": true})
      */
-    public function getRelocationTopFromAction($limit)
+    public function getRelocationTopFromAction($from, $to, $limit)
     {
         $conn = $this->get('database_connection');
         $result = $conn->executeQuery(<<<SQL
-SELECT fromstation, COUNT(*) AS count 
+SELECT fromstation AS station, COUNT(*) AS count 
 FROM bike_relocation r
+WHERE r.starttime BETWEEN :from AND :to
 GROUP BY fromstation
 ORDER BY count DESC
 LIMIT :limit
 SQL
-            , [':limit' => $limit]);
+            , [
+                ':limit' => $limit,
+                ':from' => $from,
+                ':to' => $to
+            ]);
         return new JsonResponse($result->fetchAll());
     }
 
     /**
-     * @Route("/relocation/top_to/{limit}", name="relocation_top_to", options={"expose": true})
+     * @Route("/relocation/top_to/{from}/{to}/{limit}", name="relocation_top_to", options={"expose": true})
      */
-    public function getRelocationTopToAction($limit)
+    public function getRelocationTopToAction($from, $to, $limit)
     {
         $conn = $this->get('database_connection');
         $result = $conn->executeQuery(<<<SQL
-SELECT tostation, COUNT(*) AS count 
+SELECT tostation AS station, COUNT(*) AS count 
 FROM bike_relocation r
+WHERE r.endtime BETWEEN :from AND :to
 GROUP BY tostation
 ORDER BY count DESC
 LIMIT :limit
 SQL
-            , [':limit' => $limit]);
+            , [
+                ':limit' => $limit,
+                ':from' => $from,
+                ':to' => $to
+            ]);
         return new JsonResponse($result->fetchAll());
     }
 

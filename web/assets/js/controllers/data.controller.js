@@ -31,6 +31,26 @@ function DataController() {
             overlay.hide('#histogram');
         }).bind(this));
     }).bind(this);
+
+    this.loadTopRelocationFrom = (function(from, to) {
+        overlay.show('#map');
+        d3.json(Routing.generate("relocation_top_from", {"from": from, "to": to, "limit": 20} ), (function (error, json) {
+            if (error) throw error;
+
+            this.emit('top_bike_relocation_from', json);
+            overlay.hide('#map');
+        }).bind(this));
+    }).bind(this);
+
+    this.loadTopRelocationTo = (function(from, to) {
+        overlay.show('#map');
+        d3.json(Routing.generate("relocation_top_to", {"from": from, "to": to, "limit": 20} ), (function (error, json) {
+            if (error) throw error;
+
+            this.emit('top_bike_relocation_to', json);
+            overlay.hide('#map');
+        }).bind(this));
+    }).bind(this);
 }
 
 var data = new DataController();
