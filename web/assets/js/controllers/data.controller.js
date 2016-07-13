@@ -11,21 +11,21 @@ function DataController() {
     this.avg_trip_length = {};
 
     this.loadTop5 = (function(from, to) {
-        overlay.show();
+        overlay.show('#map');
         d3.json(Routing.generate("top5_per_day", {"timestamp": from} ), (function (error, json) {
             if (error) throw error;
             this.emit('top5', json);
-            overlay.hide();
+            overlay.hide('#map');
         }).bind(this));
     }).bind(this);
     
     this.loadTopTrips = (function(from, to) {
-        overlay.show();
-        d3.json(Routing.generate("top_trips_per_month", {"timestamp": from, "amount": 50} ), (function (error, json) {
+        overlay.show('#map');
+        d3.json(Routing.generate("top_trips_in_range", {"from": from, "to": to, "limit": 50} ), (function (error, json) {
             if (error) throw error;
 
             this.emit('top_trips_per_month', json);
-            overlay.hide();
+            overlay.hide('#map');
         }).bind(this));
     }).bind(this);
 }
@@ -44,27 +44,23 @@ d3.json(Routing.generate("list_stations"), function (error, json) {
     overlay.hide();
 });
 
-overlay.show();
 d3.json("/assets/data/bike_tracks.geojson", function(error, json) {
     if (error) throw error;
 
     data.tracks = json;
 
     data.emit('bike_tracks');
-    overlay.hide();
 });
 
-overlay.show();
 d3.json("/assets/data/racks.geojson", function(error, json) {
     if (error) throw error;
 
     data.racks = json;
 
     data.emit('racks');
-    overlay.hide();
 });
 
-overlay.show();
+overlay.show('#trips-per-day');
 d3.json(Routing.generate("trips_per_week"), function (error, json) {
     if (error) throw error;
 
@@ -76,10 +72,10 @@ d3.json(Routing.generate("trips_per_week"), function (error, json) {
     data.trips_per_week = json;
 
     data.emit('trips_per_day');
-    overlay.hide();
+    overlay.hide('#trips-per-day');
 });
 
-overlay.show();
+overlay.show('#stats');
 d3.json(Routing.generate("avg_trip_length"), function (err, json) {
     if (err) throw err;
 
@@ -89,5 +85,5 @@ d3.json(Routing.generate("avg_trip_length"), function (err, json) {
     });
     data.avg_trip_length = json;
     data.emit('avg_trip_length');
-    overlay.hide();
+    overlay.hide('#stats');
 })

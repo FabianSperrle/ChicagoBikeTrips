@@ -152,7 +152,10 @@ SQL
     }
 
     /**
-     * @Route("/trips/top/range/{from}/{to}", requirements={"from": "\d+", "to": "\d+"})
+     * @Route("/trips/top/range/{from}/{to}",
+     *     name="top_trips_in_range",
+     *     options={"expose": true},
+     *     requirements={"from": "\d+", "to": "\d+"})
      * @param Request $request
      * @param $from
      * @param $to
@@ -161,7 +164,6 @@ SQL
      */
     public function getTopTripsInRange(Request $request, $from, $to)
     {
-        $threshold = $request->query->getInt('threshold');
         $start = new \DateTime();
         $start->setTimestamp($from)
             ->setTimezone(new \DateTimeZone('UTC'))
@@ -175,16 +177,32 @@ SQL
 
         $conn = $this->get('database_connection');
 
-        $q = $conn->prepare('SELECT fromstation, tostation, SUM(count) AS sum
+        $threshold = $request->query->getInt('threshold');
+        $thresholdPart = "";
+        if ($threshold) {
+            $thresholdPart = " HAVING SUM(subscriber)+SUM(customer) >= :threshold";
+        }
+        
+        $limit = $request->query->getInt('limit');
+        $limitPart = "";
+        if ($limit) {
+            $limitPart = " LIMIT :limit";
+        }
+        
+        $q = $conn->prepare('SELECT fromstation, tostation, SUM(subscriber) AS subscriber, SUM(customer) AS customer
 FROM top_trips_per_day
 WHERE day BETWEEN :start AND :end
-GROUP BY fromstation, tostation HAVING SUM(count) >= :threshold
-ORDER BY sum DESC');
-        $q->execute([
-            ':start' => $start->format('Y-m-d'),
-            ':end' => $end->format('Y-m-d'),
-            ':threshold' => $threshold
-        ]);
+GROUP BY fromstation, tostation' . $thresholdPart . '
+ORDER BY SUM(subscriber)+SUM(customer) DESC ' . $limitPart);
+        if ($threshold) {
+            $q->bindValue(':threshold', $threshold);
+        }
+        if ($limit) {
+            $q->bindValue(':limit', $limit);
+        }
+        $q->bindValue(':start', $start->format('Y-m-d'));
+        $q->bindValue(':end', $end->format('Y-m-d'));
+        $q->execute();
         return new JsonResponse($q->fetchAll());
     }
 }
