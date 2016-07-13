@@ -156,12 +156,7 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
     console.log(maxSum);
     console.log(minSum);
 
-    //let color = chroma.scale(['ff3e04', '1188ff'])
-    let color = chroma.scale(['yellow', 'green'])
-        .domain([minRatio, maxRatio]);
-
-    //let color2 = chroma.scale(['white', 'green'])
-    let color2 = chroma.scale(['white', '18f'])
+    let color2 = colors.bg_chroma
         .domain([minSum, maxSum]);
 
     let size = d3.scale.quantize()
@@ -192,7 +187,7 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         })
         .style("fill", function (d) {
             // return color(ratio[d]).toString();
-            return "#68b300";
+            return colors.customerColor;
         })
         .attr("x", function (d) {
             let o = d3.time.weekOfYear(new Date(d)) * cellSize;
@@ -236,7 +231,7 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         })
         .style("fill", function (d) {
             //return color(ratio[d]).toString();
-            return "yellow";
+            return colors.subscriberColor;
         })
         .attr("x", function (d) {
             let o = d3.time.weekOfYear(new Date(d)) * cellSize;
