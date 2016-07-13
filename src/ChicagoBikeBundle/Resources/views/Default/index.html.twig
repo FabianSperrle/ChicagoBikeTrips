@@ -32,6 +32,23 @@
             stroke-linecap: round;
         }
 
+        .legend {
+            display: inline-block;
+            height: 25px;
+            width: 25px;
+            line-height: 30px;
+            vertical-align: middle;
+            margin-left: 30px;
+        }
+
+        .legend.customers {
+            background-color: #68b300;
+        }
+
+        .legend.subscribers {
+            background-color: #ffd400;
+        }
+
         .slider .handle path {
             stroke: darkgray;
             stroke-width: 3px;
@@ -126,8 +143,16 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
-                                    <div id="histogram_container">
-                                        <div id="histogram"></div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="legend customers"> </div> Customer
+                                            <div class="legend subscribers"> </div> Subscriber
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div id="histogram_container">
+                                                <div id="histogram"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
