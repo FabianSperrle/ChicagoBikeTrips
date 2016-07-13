@@ -74,7 +74,7 @@ as ct(Month text , Customer text, Subscriber text)
         $result = $conn->executeQuery(<<<SQL
 SELECT fromstation AS station, COUNT(*) AS count 
 FROM bike_relocation r
-WHERE r.starttime BETWEEN :from AND :to
+WHERE extract(epoch from r.starttime) BETWEEN :from AND :to
 GROUP BY fromstation
 ORDER BY count DESC
 LIMIT :limit
@@ -96,7 +96,7 @@ SQL
         $result = $conn->executeQuery(<<<SQL
 SELECT tostation AS station, COUNT(*) AS count 
 FROM bike_relocation r
-WHERE r.endtime BETWEEN :from AND :to
+WHERE extract(epoch from r.endtime) BETWEEN :from AND :to
 GROUP BY tostation
 ORDER BY count DESC
 LIMIT :limit
