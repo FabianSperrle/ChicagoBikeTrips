@@ -188,82 +188,25 @@ function addBikeRacks() {
     control.addOverlay(racks, "Bike Stations");
 }
 
-var top5Ids = [undefined, undefined, undefined, undefined, undefined];
-var stationsBackup = undefined;
-function processTopStations(top5) {
-    if (stationsBackup == undefined) {
-        stationsBackup = data.stations;
-    }
-    top5 = top5[0];
-    var stations = [];
-    var count = [];
-
-    for (var i = 1; i < 6; i++) {
-        var d = top5["rank" + i];
-        var s = d.split("-");
-        count.push(s[0]);
-        stations.push(s[1]);
+var stationsLayer = null;
+function processTopStations(topStations) {
+    if (stationsLayer != null) {
+        map.removeLayer(stationsLayer);
     }
 
-    for (let i = 0; i < data.stations.length; i++) {
-        let d = data.stations[i];
-        for (let j = 0; j < 5; j++) {
-            if (stations[j] == d.id) {
-                stations[j] = i;
-            }
-        }
-    }
-
-    var divIcon = L.divIcon({
+    var icon = L.divIcon({
         className: 'pin highlight',
         iconSize: [20, 20]
     });
 
-    for (let i = 0; i < 5; i++) {
-        let marker_id = data.stations[stations[i]].layerId;
-        let marker = points.getLayer(marker_id);
-        let latlng;
-        if (marker == undefined) {
-            latlng = {
-                lat: stationsBackup[stations[i]].latitude,
-                lng: stationsBackup[stations[i]].longitude
-            };
-        } else {
-            latlng = marker.getLatLng();
-        }
-
-        let title;
-        if (marker == undefined) {
-            title = stationsBackup[stations[i]].name;
-        } else {
-            title = marker.options.title;
-        }
-        var newMarker = L.marker(L.latLng(latlng.lat, latlng.lng), {
-            title: title,
-            icon: divIcon,
-            rotationAngle: -45
-        });
-        let cont;
-        if (marker == undefined) {
-            let date = new Date(stationsBackup[stations[i]].onlineDate.timestamp * 1000);
-            cont = "<h4>" + title + "</h4>" +
-                "Capacity: " + stationsBackup[stations[i]].dpcapacity + " bikes<br />" +
-                "Online Since: " + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
-        } else {
-            cont = marker._popup._content;
-        }
-        newMarker.bindPopup(cont);
-        points.removeLayer(marker_id);
-        points.addLayer(newMarker);
-
-        let newMarkerId = points.getLayerId(newMarker);
-        data.stations[stations[i]].layerId = newMarkerId;
-
-        if (top5Ids[i] != undefined)
-            if (points.getLayer(top5Ids[i]) != undefined)
-                points.removeLayer(top5Ids[i]);
-        top5Ids[i] = newMarkerId;
+    let markers = [];
+    for (let i = 0; i < topStations.length; i++) {
+        let station = data.stations[data.stationIndex[topStations[i].station]];
+        markers.push(L.marker([station.latitude, station.longitude], {
+            icon: icon
+        }));
     }
+    stationsLayer = L.layerGroup(markers).addTo(map);
 }
 
 

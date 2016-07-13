@@ -24,22 +24,27 @@ class StationController extends Controller
     }
 
     /**
-     * @Route("stations/top5/{timestamp}", name="top5_per_day", options={"expose": true})
-     * @param $timestamp
+     * @Route("stations/top5/{from}/{to}/{limit}",
+     *     name="top5_per_day",
+     *     requirements={"from": "\d+", "to": "\d+", "limit": "\d+"},
+     *     options={"expose": true})
+     * @param $from
+     * @param $to
+     * @param $limit
+     * @return JsonResponse
+     * @internal param $timestamp
      */
-    public function top5_per_day($timestamp) {
+    public function top5_per_day($from, $to, $limit) {
         $conn = $this->get('database_connection');
-        $timestamp = floor($timestamp/86400)*86400;
-        $query = $conn->prepare("SELECT date, rank1, rank2, rank3, rank4, rank5
-                        FROM top5_stations_per_day
-                        WHERE extract (epoch from date) = ?");
-        $query->bindParam(1, $timestamp);
-        $query->execute();
+        $query = $conn->prepare("SELECT station, SUM(popularity) FROM popularity WHERE extract(epoch from date) BETWEEN :from AND :to GROUP BY station ORDER BY SUM(popularity) DESC LIMIT :limit");
+        $query->bindParam(':from', $from);
+        $query->bindParam(':to', $to);
+        $query->execute([
+            ':from' => $from,
+            ':to' => $to,
+            ':limit' => $limit
+        ]);
         $json = $query->fetchAll();
-        
-        if (count($json) == 0) {
-            throw new \InvalidArgumentException("Time stamp invalid or out of range");
-        }
         
         return new JsonResponse($json);
     }

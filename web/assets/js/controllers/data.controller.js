@@ -12,7 +12,7 @@ function DataController() {
 
     this.loadTop5 = (function(from, to) {
         overlay.show('#map');
-        d3.json(Routing.generate("top5_per_day", {"timestamp": from} ), (function (error, json) {
+        d3.json(Routing.generate("top5_per_day", {"from": from, "to": to, "limit": 5} ), (function (error, json) {
             if (error) throw error;
             this.emit('top5', json);
             overlay.hide('#map');
