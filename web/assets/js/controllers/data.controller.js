@@ -6,6 +6,7 @@ function DataController() {
     this.stationIndex = {};
     this.tracks = {};
     this.racks = {};
+    this.regions = {};
     this.markerlist = {};
     this.trips_per_week = {};
     this.avg_trip_length = {};
@@ -60,6 +61,14 @@ d3.json("/assets/data/racks.geojson", function(error, json) {
     data.racks = json;
 
     data.emit('racks');
+});
+
+d3.json("https://raw.githubusercontent.com/smartchicago/chicago-atlas/master/db/import/zipcodes.geojson", function(error, json) {
+    if (error) throw error;
+
+    data.regions = json;
+
+    data.emit('regions');
 });
 
 overlay.show('#trips-per-day');

@@ -116,15 +116,34 @@ function addTopTripsLayer(topTripsData) {
     for (var i = 0; i < topTripsData.length; i++) {
         var currentTopTrip = topTripsData[i];
         var from = data.stations[data.stationIndex[currentTopTrip.fromstation]];
+        console.log(from);
         var to = data.stations[data.stationIndex[currentTopTrip.tostation]];
         var latlng_from = L.latLng(from.latitude, from.longitude);
         var latlng_to = L.latLng(to.latitude, to.longitude);
 
         let ratio = +currentTopTrip.customer / (+currentTopTrip.customer + +currentTopTrip.subscriber);
-
+        let weight = scale(currentTopTrip.subscriber + currentTopTrip.customer);
+        
         let line = L.polyline([latlng_from, latlng_to], {
-            weight: scale(currentTopTrip.subscriber + currentTopTrip.customer),
-            color: c(ratio)
+            weight: weight,
+            color: c(ratio),
+            className: "line" + from.id + to.id
+        });
+        line.on('mouseover', function(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                opacity: 1,
+                weight: weight * 1.5
+            });
+        });
+        line.on('mouseout', function(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                opacity: 0.6,
+                weight: weight * 0.66
+            });
         });
         lines.push(line);
 
@@ -184,6 +203,18 @@ function addBikeRacks() {
     control.addOverlay(racks, "Bike Stations");
 }
 
+function addRegions() {
+    var regions = L.geoJson(data.regions, {
+        style: {
+            "color": "#39CCCC",
+            "weight": 5,
+            "opacity": 0.40,
+            "fillOpacity": 0.2
+        }
+    });
+    control.addOverlay(regions, "Regions");
+}
+
 var stationsLayer = null;
 function processTopStations(topStations) {
     if (stationsLayer != null) {
@@ -212,4 +243,5 @@ data.on('loaded_stations', addHeatLayer);
 data.on('top_trips_per_month', addTopTripsLayer);
 data.on('bike_tracks', addBikeTracks);
 data.on('racks', addBikeRacks);
+data.on('regions', addRegions);
 data.on('top5', processTopStations);
