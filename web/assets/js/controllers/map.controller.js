@@ -116,7 +116,6 @@ function addTopTripsLayer(topTripsData) {
     for (var i = 0; i < topTripsData.length; i++) {
         var currentTopTrip = topTripsData[i];
         var from = data.stations[data.stationIndex[currentTopTrip.fromstation]];
-        console.log(from);
         var to = data.stations[data.stationIndex[currentTopTrip.tostation]];
         var latlng_from = L.latLng(from.latitude, from.longitude);
         var latlng_to = L.latLng(to.latitude, to.longitude);
@@ -129,6 +128,14 @@ function addTopTripsLayer(topTripsData) {
             color: c(ratio),
             className: "line" + from.id + to.id
         });
+
+        let popup = "From <b>" + from.name + "</b> to <b>" + to.name + "</b><br/>" +
+            "Customers: " + currentTopTrip.customer + "<br />"  + 
+            "Subscribers: " + currentTopTrip.subscriber +  "<br />" +
+            "Total: " + (+currentTopTrip.customer + +currentTopTrip.subscriber);
+
+        line.bindPopup(popup);
+        
         line.on('mouseover', function(e) {
             var layer = e.target;
 
