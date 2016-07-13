@@ -4,7 +4,8 @@ var width = 1500,
 
 var percent = d3.format(".1%"),
     format = d3.time.format("%Y-%m-%d"),
-    month_format = d3.time.format("%b");
+    month_format = d3.time.format("%b"),
+    tooltipFormat = d3.time.format("%d.%m.%Y");
 
 var svg = d3.select("#calendar").selectAll("svg")
     .data(d3.range(2013, 2015))
@@ -35,6 +36,9 @@ var gs = svg.selectAll(".day")
         return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
     })
     .enter().append("g")
+    .attr("title", tooltipContent)
+    .attr("data-toggle", "tooltip")
+    .attr("data-placement", "bottom")
     .datum(format);
 
 let isClicked = false;
@@ -75,6 +79,17 @@ function endSelect() {
 
     range.updateRangeFromDate(startDate, endDate);
 }
+
+function tooltipContent(d) {
+    let date = new Date(d);
+    if (entryIndex != undefined) {
+        return "Date: " + tooltipFormat(date) + "<br>Customers: " + entryIndex[d].customers
+            + "<br>Subscribers: " + entryIndex[d].subscribers;
+    } else {
+        return "Date: " + tooltipFormat(date) + "<br>Customers: N/A<br>Subscribers: N/A";
+    }
+}
+
 let rect = gs.append("rect")
     .attr("class", "day")
     .attr("width", cellSize)
@@ -102,8 +117,6 @@ let rect = gs.append("rect")
         endSelect.call(this);
     });
 
-rect.append("title")
-    .text(Object);
 
 let month_groups = svg.selectAll(".month")
     .data(function (d) {
@@ -129,6 +142,7 @@ month_groups.append("text")
 
 let sum = {};
 let ratio = {};
+var entryIndex = {};
 overlay.show('#calendar');
 d3.json(Routing.generate('trips_per_day'), function (error, json) {
     if (error) throw error;
@@ -137,15 +151,22 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
 
     let minRatio = 1, maxRatio = 0;
     let minSum = 10000000, maxSum = 0;
+
     json.forEach(function (entry) {
+        let dayKey = format(new Date(entry.day));
         let r = entry.customers / (entry.customers + entry.subscribers);
-        ratio[format(new Date(entry.day))] = r;
+        ratio[dayKey] = r;
 
         if (r > maxRatio) maxRatio = r;
         if (r < minRatio) minRatio = r;
 
         let s = entry.subscribers + entry.customers;
-        sum[format(new Date(entry.day))] = s;
+        sum[dayKey] = s;
+
+        entryIndex[dayKey] = {
+            customers: entry.customers,
+            subscribers: entry.subscribers
+        };
 
         if (s > maxSum) maxSum = s;
         if (s < minSum) minSum = s;
@@ -163,7 +184,6 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         .domain([minSum, maxSum])
         .range(d3.range(cellSize));
 
-
     gs.filter(function (d) {
         return d in sum;
     })
@@ -172,9 +192,14 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
             return color2(sum[d]);
         });
 
+    let tooltipElements = $('[data-toggle="tooltip"]');
+    tooltipElements.tooltip('destroy');
+
+
     gs.filter(function (d) {
         return d in ratio;
     })
+    .attr("title", tooltipContent)
         .append("rect")
         .attr("class", function (d) {
             return "day";
@@ -207,12 +232,6 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         })
         .on('mouseup', function () {
             endSelect.call(this.previousSibling);
-        })
-        .append('title')
-        .text(Object)
-        .select("title")
-        .text(function (d) {
-            return d + ": " + percent(data[d]);
         });
     
 
@@ -252,13 +271,11 @@ d3.json(Routing.generate('trips_per_day'), function (error, json) {
         })
         .on('mouseup', function () {
             endSelect.call(this.previousSibling.previousSibling);
-        })
-        .append('title')
-        .text(Object)
-        .select("title")
-        .text(function (d) {
-            return d + ": " + percent(data[d]);
         });
+    tooltipElements.tooltip({
+        container: 'body',
+        html: true
+    });
     overlay.hide('#calendar');
 });
 
