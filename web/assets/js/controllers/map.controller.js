@@ -96,14 +96,10 @@ var addHeatLayer = function () {
 }
 
 var lineLayer = null;
-var decorators = [];
 function addTopTripsLayer(topTripsData) {
     if (lineLayer != null) {
         map.removeLayer(lineLayer);
         control.removeLayer(lineLayer);
-        for (let i = 0; i < decorators.length; i++) {
-            map.removeLayer(decorators[i]);
-        }
     }
     var lines = [];
     let max = -99999999;
@@ -132,7 +128,7 @@ function addTopTripsLayer(topTripsData) {
         });
         lines.push(line);
 
-        decorators[i] = L.polylineDecorator(line, {
+        lines.push(L.polylineDecorator(line, {
             patterns: [
                 {
                     offset: '50%',
@@ -147,7 +143,7 @@ function addTopTripsLayer(topTripsData) {
                     })
                 }
             ]
-        }).addTo(map);
+        }));
     }
 
     lineLayer = L.layerGroup(lines);
