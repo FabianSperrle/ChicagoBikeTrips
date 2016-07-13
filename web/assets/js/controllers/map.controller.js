@@ -1,4 +1,3 @@
-
 "use strict";
 var tiles = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
     maxZoom: 18,
@@ -72,13 +71,13 @@ var addPointsLayer = function () {
 
         marker.bindPopup(popup);
         points.addLayer(marker);
-        
+
         data.stations[i].layerId = points.getLayerId(marker);
     }
 
     control.addOverlay(points, "Divvy Stations", "Visualizations");
     points.addTo(map);
-    
+
 }
 
 var addHeatLayer = function () {
@@ -115,7 +114,8 @@ function addTopTripsLayer(topTripsData) {
         min = Math.min(min, sum);
     }
 
-    let scale = d3.scale.linear().domain([min, max]).range([1, 10]);
+    let scale = d3.scale.linear().domain([min, max]).range([3, 10]);
+    let c = colors.cust_sub_chroma.domain([0.0, 1.0]);
 
     for (var i = 0; i < topTripsData.length; i++) {
         var currentTopTrip = topTripsData[i];
@@ -124,14 +124,28 @@ function addTopTripsLayer(topTripsData) {
         var latlng_from = L.latLng(from.latitude, from.longitude);
         var latlng_to = L.latLng(to.latitude, to.longitude);
 
+        let ratio = +currentTopTrip.customer / (+currentTopTrip.customer + +currentTopTrip.subscriber);
+
         let line = L.polyline([latlng_from, latlng_to], {
-            weight: scale(currentTopTrip.subscriber + currentTopTrip.customer)
+            weight: scale(currentTopTrip.subscriber + currentTopTrip.customer),
+            color: c(ratio)
         });
         lines.push(line);
 
         decorators[i] = L.polylineDecorator(line, {
             patterns: [
-                {offset: '100%', repeat: 40, symbol: L.Symbol.arrowHead({pixelSize: 15})}
+                {
+                    offset: '100%',
+                    repeat: 40,
+                    fill: c(ratio),
+                    symbol: L.Symbol.arrowHead({
+                        pixelSize: 10,
+                        pathOptions: {
+                            fillOpacity: 0.6,
+                            color: c(ratio)
+                        }
+                    })
+                }
             ]
         }).addTo(map);
     }
