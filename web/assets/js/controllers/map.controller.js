@@ -148,7 +148,7 @@ function addBikeTracks() {
             "weight": 2,
             "opacity": 0.65
         }
-    }).addTo(map);
+    });
     control.addOverlay(routes, "Bike Lanes");
 }
 
