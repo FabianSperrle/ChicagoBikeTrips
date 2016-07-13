@@ -90,24 +90,24 @@ function addLineChart() {
 
     vis.append('svg:path')
         .attr('d', customersLineFunc(data.trips_per_week))
-        .attr('stroke', '#18f')
+        .attr('stroke', colors.customerColor)
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
-    addScatterPlot('customers', '#18f');
+    addScatterPlot('customers', colors.customerColor);
 
     vis.append('svg:path')
         .attr('d', subscribersLineFunc(data.trips_per_week))
-        .attr('stroke', '#ff3e04')
+        .attr('stroke', colors.subscriberColor)
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
-    addScatterPlot('subscribers', '#ff3e04');
+    addScatterPlot('subscribers', colors.subscriberColor);
 
     var legendRectSize = 18;
     var legendSpacing = 4;
     var legend = vis.selectAll('.legend')
-        .data([{name: "Customers", color: "#18f"}, {name: "Subscribers", color: "#ff3e04"}])
+        .data([{name: "Customers", color: colors.customerColor}, {name: "Subscribers", color: colors.subscriberColor}])
         .enter()
         .append('g')
         .attr('class', 'legend')

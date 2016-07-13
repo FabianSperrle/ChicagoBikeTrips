@@ -58,20 +58,20 @@ function tripLengthChart() {
 
     vis.append('svg:path')
         .attr('d', customersLineFunc(data.avg_trip_length))
-        .attr('stroke', '#18f')
+        .attr('stroke', colors.customerColor)
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
     vis.append('svg:path')
         .attr('d', subscribersLineFunc(data.avg_trip_length))
-        .attr('stroke', '#ff3e04')
+        .attr('stroke', colors.subscriberColor)
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 
     var legendRectSize = 18;
     var legendSpacing = 4;
     var legend = vis.selectAll('.legend')
-        .data([{name: "Customers", color: "#18f"}, {name: "Subscribers", color: "#ff3e04"}])
+        .data([{name: "Customers", color: colors.customerColor}, {name: "Subscribers", color: colors.subscriberColor}])
         .enter()
         .append('g')
         .attr('class', 'legend')
@@ -100,7 +100,7 @@ var rt_customers = [{
     labels: ['Round Trip', 'One-Way'],
     type: 'pie',
     marker: {
-        colors: ['#18f', '#4cc4f5']
+        colors: ['#4a8000', colors.customerColor]
     }
 }];
 
@@ -109,7 +109,7 @@ var rt_subscribers = [{
     labels: ['Round Trip', 'One-Way'],
     type: 'pie',
     marker: {
-        colors: ['#ff3e04', '#ff8d00']
+        colors: ['#ffb203', colors.subscriberColor]
     }
 }];
 
