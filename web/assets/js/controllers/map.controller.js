@@ -8,7 +8,7 @@ var latlng = L.latLng(41.862036, -87.680009);
 var map = L.map('map',
     {
         center: latlng,
-        zoom: 11,
+        zoom: 12,
         layers: [tiles]
     }
 );

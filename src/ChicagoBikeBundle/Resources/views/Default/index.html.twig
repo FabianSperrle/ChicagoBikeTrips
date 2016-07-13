@@ -2,6 +2,7 @@
 <head>
     <title>Chicago Bike Trips</title>
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/map.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/trips.css') }}">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css">
@@ -54,6 +55,7 @@
     </style>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ asset('assets/js/libraries/loadingoverlay.min.js') }}"></script>
 
     <script src="{{ asset('assets/js/libraries/telegraph.min.js') }}"></script>
@@ -71,69 +73,80 @@
 </head>
 
 <body>
-<h1>Bike Trips in Chicago</h1>
-<div id="map_container">
-    <div id="map"></div>
-</div>
-
-<div id="calendar_container">
-    <div id="calendar">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Bike Trips in Chicago</h1>
+        </div>
+        <div class="col-xs-12">
+            <div id="map_container">
+                <div id="map"></div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div id="calendar_container">
+                <div id="calendar">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <h2>Trips per day</h2>
+            <div id="trips-container">
+                <svg id="trips-per-day" width="1000" height="300"></svg>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <h2>Average Trip Duration</h2>
+            <div id="stats-container">
+                <svg id="stats" width="1000" height="300"></svg>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <h2>Round Trip Percentage</h2>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div id="customer_pie"></div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div id="subscriber_pie"></div>
+        </div>
+        <div class="col-xs-12">
+            <h2>Bike relocations</h2>
+            <div>
+                <button type="button" id="relocation_from_button">From stations</button>
+                <button type="button" id="relocation_to_button">To stations</button>
+            </div>
+            <div id="relocation_data_container">
+                <div id="relocation_from">
+                    <h3>Top source stations</h3>
+                    <p>Stations with top amounts of bikes picked up for transport to another station.</p>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Station</th>
+                            <th>Relocated from</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="relocation_to">
+                    <h3>Top destination stations</h3>
+                    <p>Stations with top amounts of bikes delivered to.</p>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Station</th>
+                            <th>Relocated to</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="relocation_route"></div>
+            </div>
+        </div>
     </div>
-</div>
-
-<div id="slider-container">
-    <div id="slider"></div>
-</div>
-
-<h2>Trips per day</h2>
-<div id="trips-container">
-    <svg id="trips-per-day" width="1000" height="300"></svg>
-</div>
-
-<h2>Average Trip Duration</h2>
-<div id="stats-container">
-    <svg id="stats" width="1000" height="300"></svg>
-</div>
-
-<h2>Round Trip Percentage</h2>
-<div id="pie-container" style="width:100%;" class="clearfix">
-    <div id="customer_pie" style="float:left"></div>
-    <div id="subscriber_pie" style="float:right"></div>
-</div>
-
-<h2>Bike relocations</h2>
-<div>
-    <button type="button" id="relocation_from_button">From stations</button>
-    <button type="button" id="relocation_to_button">To stations</button>
-</div>
-<div id="relocation_data_container">
-    <div id="relocation_from">
-        <h3>Top source stations</h3>
-        <p>Stations with top amounts of bikes picked up for transport to another station.</p>
-        <table>
-            <thead>
-            <tr>
-                <th>Station</th>
-                <th>Relocated from</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div id="relocation_to">
-        <h3>Top destination stations</h3>
-        <p>Stations with top amounts of bikes delivered to.</p>
-        <table>
-            <thead>
-            <tr>
-                <th>Station</th>
-                <th>Relocated to</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div id="relocation_route"></div>
 </div>
 
 <script src="{{ asset('assets/js/controllers/overlay.controller.js') }}"></script>
