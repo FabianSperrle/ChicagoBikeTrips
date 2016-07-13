@@ -37,58 +37,6 @@ class TripController extends Controller
     }
 
     /**
-     * @Route("/trips/top/{amount}", requirements={"amount": "\d+"}, name="top_trips", options={"expose": true})
-     */
-    public function topTripsAction($amount)
-    {
-        $conn = $this->get('database_connection');
-        $query = $conn->prepare('SELECT s_from.latitude from_lat, s_from.longitude from_long, s_to.latitude to_lat, s_to.longitude to_long FROM (
-            SELECT tt.fromstation, tt.tostation, SUM(tt.count) AS count
-            FROM top_trips_per_month tt
-            WHERE fromstation != tostation
-            GROUP BY fromstation, tostation
-            ORDER BY count DESC
-            LIMIT :limit) AS t
-            LEFT JOIN station s_from ON s_from.id = t.fromstation
-            LEFT JOIN station s_to ON s_to.id = t.tostation
-            ORDER BY t.count DESC');
-        $query->execute([
-            ':limit' => $amount
-        ]);
-        $data = $query->fetchAll();
-
-        return new JsonResponse($data);
-    }
-
-    /**
-     * @Route("/trips/top/{amount}/{timestamp}", requirements={"amount": "\d+", "timestamp": "\d+"}, name="top_trips_per_month", options={"expose": true})
-     */
-    public function topTripsPerMonthAction($amount, $timestamp)
-    {
-        $conn = $this->get('database_connection');
-        $timestamp = (new \DateTime())
-            ->setTimestamp($timestamp)
-            ->setTimezone(new \DateTimeZone('UTC'))
-            ->setTime(0, 0, 0)
-            ->modify("first day of this month")
-            ->getTimestamp();
-        $query = $conn->prepare('SELECT s_from.latitude from_lat, s_from.longitude from_long, s_to.latitude to_lat, s_to.longitude to_long
-FROM top_trips_per_month tt
-LEFT JOIN station s_from ON s_from.id = tt.fromstation
-LEFT JOIN station s_to ON s_to.id = tt.tostation
-WHERE fromstation != tostation AND extract(EPOCH FROM month) = :month
-ORDER BY count DESC
-LIMIT :limit');
-        $query->execute([
-            ':limit' => $amount,
-            ':month' => $timestamp
-        ]);
-        $data = $query->fetchAll();
-
-        return new JsonResponse($data);
-    }
-
-    /**
      * @Route("/trips/statistics/length", name="avg_trip_length", options={"expose": true})
      */
     public function getAverageTripLength() {
