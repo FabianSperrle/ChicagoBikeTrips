@@ -97,7 +97,7 @@ let updateHistogram = function(json) {
             let from = data.stations[data.stationIndex[d.from]];
             let to = data.stations[data.stationIndex[d.to]];
             return "From: " + from.name + "<br>To: " + to.name + "<br>Customer: " + d.customer
-                + "<br>Subscriber: " + d.subscriber + "<br>Gesamt: " + (d.customer+d.subscriber);
+                + "<br>Subscriber: " + d.subscriber + "<br>Total: " + (d.customer+d.subscriber);
         })
         .attr("data-toggle", "tooltip")
         .attr("data-placement", "left")

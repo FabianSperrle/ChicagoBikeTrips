@@ -83,10 +83,11 @@ function endSelect() {
 function tooltipContent(d) {
     let date = new Date(d);
     if (entryIndex != undefined) {
+        let sum = entryIndex[d].customers + entryIndex[d].subscribers;
         return "Date: " + tooltipFormat(date) + "<br>Customers: " + entryIndex[d].customers
-            + "<br>Subscribers: " + entryIndex[d].subscribers;
+            + "<br>Subscribers: " + entryIndex[d].subscribers + "<br>Total: " + sum;
     } else {
-        return "Date: " + tooltipFormat(date) + "<br>Customers: N/A<br>Subscribers: N/A";
+        return "Date: " + tooltipFormat(date) + "<br>Customers: N/A<br>Subscribers: N/A<br>Total: N/A";
     }
 }
 
