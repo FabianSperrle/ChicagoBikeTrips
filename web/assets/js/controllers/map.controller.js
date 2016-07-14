@@ -3,6 +3,10 @@ var tiles = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}
     maxZoom: 18,
 });
 
+var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+
 var latlng = L.latLng(41.862036, -87.680009);
 var map = L.map('map',
     {
@@ -14,7 +18,8 @@ var map = L.map('map',
 
 var control = L.control.groupedLayers(
     {
-        "Streets": tiles
+        "Streets": tiles,
+        "Satellite": Esri_WorldImagery
     },
     {
         "Visualizations": {}
