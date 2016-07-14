@@ -230,6 +230,7 @@ var stationsLayer = null;
 function processTopStations(topStations) {
     if (stationsLayer != null) {
         map.removeLayer(stationsLayer);
+        control.removeLayer(stationsLayer);
     }
 
     var icon = L.divIcon({
@@ -253,6 +254,7 @@ var relocationFROMLayer;
 function relocationFROM(json) {
     if (relocationFROMLayer != null) {
         map.removeLayer(relocationFROMLayer);
+        control.removeLayer(relocationFROMLayer);
     }
     
     let min = Number.POSITIVE_INFINITY;
@@ -294,6 +296,7 @@ var relocationTOLayer;
 function relocationTO(json) {
     if (relocationTOLayer != null) {
         map.removeLayer(relocationTOLayer);
+        control.removeLayer(relocationTOLayer);
     }
 
     let min = Number.POSITIVE_INFINITY;
