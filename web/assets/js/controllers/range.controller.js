@@ -20,10 +20,19 @@ function RangeController() {
         let timestamp = date.getTime() / 1000;
         range.updateRangeFromTimestamp(timestamp, timestamp + 60*60*24);
     };
+
+    this.updateSelection = function(from, to) {
+        let fromDate = new Date(from * 1000);
+        let toDate = new Date(to * 1000);
+        let elem = $('#selection');
+        let format = d3.time.format("%d.%m.%Y");
+        elem.text(format(fromDate) + " - " + format(toDate));
+    }
 }
 
 var range = new RangeController();
 
+range.on('range_changed', range.updateSelection);
 range.on('range_changed', data.loadTop5);
 range.on('range_changed', data.loadTopTrips);
 range.on('range_changed', data.loadTopRelocationFrom);
