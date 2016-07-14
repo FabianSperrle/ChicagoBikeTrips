@@ -16,20 +16,26 @@ var svg = d3.select("#calendar").selectAll("svg")
     .attr("transform", "translate(" + ((width - cellSize * 53) / 2) + "," + (height - cellSize * 7 - 1) + ")");
 
 svg.append("text")
-    .attr("transform", "translate(-26," + cellSize * 3.5 + ")rotate(-90)")
+    .attr("transform", "translate(-35," + cellSize * 3.5 + ")rotate(-90)")
     .style("text-anchor", "middle")
+    .style("font-weight", "bold")
     .text(function (d) {
         return d;
     });
 
-svg.select(".weekday")
-    .data(d3.range(0, 7))
-    .append("text")
-    .attr("transform", function(d) {
-        return "translate(-6," + d * cellSize * 3.5 + ")rotate(-90)";
-    })
+svg.append("text")
+    .attr("transform","translate(-6," + cellSize * 3.5 + ")rotate(-90)")
     .style("text-anchor", "middle")
-    .html("F");
+    .style("letter-spacing", "6px")
+    .attr("class", "calendar_day")
+    .html("S F T W T M S");
+
+svg.append("text")
+    .attr("transform","translate(1350," + cellSize * 3.5 + ")rotate(-90)")
+    .style("text-anchor", "middle")
+    .style("letter-spacing", "6px")
+    .attr("class", "calendar_day")
+    .html("S F T W T M S");
 
 var gs = svg.selectAll(".day")
     .data(function (d) {
@@ -135,7 +141,7 @@ month_groups.append("text")
     .attr("z-index", 1000000)
     .style("text-anchor", "middle")
     .attr("transform", function(d, i) {
-        return "translate(" + (75 + (i * 4.3 * cellSize)) + ", 0)";
+        return "translate(" + (75 + (i * 4.3 * cellSize)) + ", -3)";
     })
     .text(function (d) {
         return month_format(d);
