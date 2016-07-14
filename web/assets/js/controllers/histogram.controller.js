@@ -100,7 +100,7 @@ let updateHistogram = function(json) {
                 + "<br>Subscriber: " + d.subscriber + "<br>Gesamt: " + (d.customer+d.subscriber);
         })
         .attr("data-toggle", "tooltip")
-        .attr("data-placement", "right")
+        .attr("data-placement", "left")
         .attr("id", function (d) {
             return d["year"];
         })
